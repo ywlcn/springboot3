@@ -25,17 +25,30 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mustache'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+//	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+
 	compileOnly 'org.projectlombok:lombok'
 
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1'
 	//runtimeOnly 'org.hsqldb:hsqldb'
 	runtimeOnly 'org.postgresql:postgresql'
 
+	implementation 'ch.qos.logback:logback-access'
+	implementation 'ch.qos.logback:logback-classic'
+
+
 //	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
 //	testImplementation 'org.springframework:spring-webflux'
 //	testImplementation 'org.springframework.graphql:spring-graphql-test'
 }
+
+//configurations {
+//	configureEach {
+//		it.exclude group:"org.springframework.boot", module: "spring-boot-starter-logging"
+//		//exclude("org.springframework.boot", "spring-boot-starter-logging")
+//	}
+//}
 
 tasks.named('test') {
 	useJUnitPlatform()
