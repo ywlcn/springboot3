@@ -1,4 +1,75 @@
-# springboot3
+# Spring boot 3
+
+# １お主な変更点
+
+## 1.1 依存関係
+
+バージョンアップにより、依存関係のバージョンアップ、メインの変更
+
+- Tomcat：10.1.11　(9系)
+- springframework：6.0.11　(5系)
+- jakarta.servlet-api：6.0.0　(4系)　（javax.servlet-apiの排除）　　サーブレットバージョン
+
+メリット：Bootの依存関係を利用することで、Java各OSSのバージョン競争などは自分自身で管理しなくてよい。
+
+デメリット：Bootの依存関係対象外のOSSを利用すると、推移依存のバージョンとBootの依存関係のバージョン一致する必要
+
+https://spring.pleiades.io/spring-boot/docs/3.1.2/reference/html/dependency-versions.html#appendix.dependency-versions
+
+## 1.2 JVM
+
+ Java 17必要
+
+SpringBoot 2.7.12：Java 8 
+
+```Java
+//
+public record Person (String name, String address) {}
+
+//
+String textBlock = """
+    Hello, this is a
+    multi-line
+    text block.
+""";
+  
+//
+if (obj instanceof String s) {
+    System.out.println(s.toLowerCase());
+}
+
+//
+import javax.servlet.http.HttpServletRequest;
+ー＞　import jakarta.servlet.http.HttpServletRequest;
+
+```
+
+## 1.3 コンパイルツール
+
+| ビルドツール | バージョン                |
+| :----------- | :------------------------ |
+| Maven        | 3.6.3 以上                |
+| Gradle       | 7.x (7.5 以降) および 8.x |
+
+
+
+## 1.4 GraalVMサポートとAOTサポート
+
+
+
+https://blog.csdn.net/Chovy_pyc/article/details/130032986?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-130032986-blog-127437745.235%5Ev38%5Epc_relevant_anti_vip&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-130032986-blog-127437745.235%5Ev38%5Epc_relevant_anti_vip&utm_relevant_index=2
+
+
+
+
+
+Scanより見つかったBeanのBean定義生成
+
+
+
+
+
+## 1.6 Observability OpenTelemetry 
 
 
 
@@ -14,9 +85,17 @@ https://zhuanlan.zhihu.com/p/574267448
 
 
 
+## Migrating Projects
 
 
-# GraalVM ネイティブイメージのサポート
+
+
+
+
+
+
+
+# 2 GraalVM ネイティブイメージのサポート
 https://spring.pleiades.io/spring-boot/docs/current/reference/html/native-image.html
 https://medium.com/graalvm/using-graalvm-and-native-image-on-windows-10-9954dc071311
 
@@ -252,3 +331,43 @@ Caused by: java.lang.NullPointerException: null
         at org.apache.ibatis.logging.LogFactory.getLog(LogFactory.java:52) ~[na:na]
         ... 15 common frames omitted
  ```
+
+
+
+
+
+
+
+
+
+
+
+# 3 OpenTelemetry
+
+https://spring.io/blog/2022/10/12/observability-with-spring-boot-3
+
+https://www.baeldung.com/spring-boot-opentelemetry-setup
+
+- https://github.com/eugenp/tutorials/tree/master/spring-cloud-modules/spring-cloud-open-telemetry
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 99 そのほか　
+
+99.1 Bean生成順番
+
+- XMLファイル定義
+- Scanより（@Compont）
+- JavaConfig (@Config)
+- AutoConfig
+

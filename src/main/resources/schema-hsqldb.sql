@@ -1,2 +1,0 @@
-CREATE TABLE cities(id BIGINT IDENTITY PRIMARY KEY,
-    name VARCHAR(255), population INT);
