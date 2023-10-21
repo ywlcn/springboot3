@@ -1,0 +1,56 @@
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.0.6'
+	id 'io.spring.dependency-management' version '1.1.3'
+	//id 'org.graalvm.buildtools.native' version '0.9.27'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-mustache'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+	//implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'io.micrometer:micrometer-tracing-bridge-otel'
+
+	// Since we have Micrometer Tracing on the classpath, the logs are automatically correlated
+	// (that is, they contain a unique trace identifier). Now we need to ship the logs. For this demo,
+	// we ship them to Grafana Loki. We can achieve that by adding the com.github.loki4j:loki-logback-appender
+	// dependency (check this link for the latest release version)
+	implementation 'com.github.loki4j:loki-logback-appender:1.4.2'
+
+
+	compileOnly 'org.projectlombok:lombok'
+
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1'
+
+	runtimeOnly 'org.hsqldb:hsqldb'
+
+	implementation 'ch.qos.logback:logback-access'
+	implementation 'ch.qos.logback:logback-classic'
+
+//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
+//	testImplementation 'org.springframework:spring-webflux'
+//	testImplementation 'org.springframework.graphql:spring-graphql-test'
+}
+
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

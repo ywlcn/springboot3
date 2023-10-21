@@ -14,7 +14,7 @@
 
 デメリット：Bootの依存関係対象外のOSSを利用すると、推移依存のバージョンとBootの依存関係のバージョン一致する必要
 
-https://spring.pleiades.io/spring-boot/docs/3.1.2/reference/html/dependency-versions.html#appendix.dependency-versions
+https://spring.pleiades.io/spring-boot/docs/3.0.6/reference/html/dependency-versions.html#appendix.dependency-versions
 
 ## 1.2 JVM
 
@@ -73,7 +73,7 @@ Scanより見つかったBeanのBean定義生成
 
 
 
-
+io.opentelemetry の追加
 
 
 
@@ -352,6 +352,40 @@ https://www.baeldung.com/spring-boot-opentelemetry-setup
 
 
 
+https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#prometheus-exporter
+
+https://github.com/open-telemetry/opentelemetry-java-examples#java-opentelemetry-examples
+
+https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/examples/extension/README.md
+
+https://opentelemetry.io/docs/instrumentation/java/getting-started/
+
+
+
+```bat
+gradle spring-open-telemetry-1:bootjar
+copy .\spring-open-telemetry-1\build\libs\spring-open-telemetry-1-0.0.1-SNAPSHOT.jar spring-open-telemetry-1.jar
+
+gradle spring-open-telemetry-2:bootjar
+copy .\spring-open-telemetry-2\build\libs\spring-open-telemetry-2-0.0.1-SNAPSHOT.jar spring-open-telemetry-2.jar
+
+set JAVA_TOOL_OPTIONS="-javaagent:lib/opentelemetry-javaagent.jar"
+set OTEL_SERVICE_NAME="product-service"
+set OTEL_METRICS_EXPORTER=prometheus
+set OTEL_EXPORTER_PROMETHEUS_PORT=9464
+set OTEL_EXPORTER_PROMETHEUS_HOST=localhost
+java -jar spring-open-telemetry-1.jar
+
+
+set JAVA_TOOL_OPTIONS="-javaagent:lib/opentelemetry-javaagent.jar"
+set OTEL_SERVICE_NAME="price-service"
+set OTEL_METRICS_EXPORTER=prometheus
+set OTEL_EXPORTER_PROMETHEUS_PORT=9464
+set OTEL_EXPORTER_PROMETHEUS_HOST=localhost
+java -jar spring-open-telemetry-2.jar
+
+
+```
 
 
 
@@ -359,6 +393,16 @@ https://www.baeldung.com/spring-boot-opentelemetry-setup
 
 
 
+
+
+```bash
+sudo docker run -d --name jaeger \
+  -e COLLECTOR_OTLP_ENABLED=true \
+  -p 16686:16686 \
+  -p 4317:4317 \
+  -p 4318:4318 \
+  jaegertracing/all-in-one:latest
+```
 
 
 

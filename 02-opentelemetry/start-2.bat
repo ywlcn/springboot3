@@ -1,0 +1,9 @@
+set JAVA_TOOL_OPTIONS="-javaagent:lib/opentelemetry-javaagent.jar"
+set OTEL_SERVICE_NAME="price-service"
+set OTEL_METRICS_EXPORTER=prometheus
+set OTEL_EXPORTER_PROMETHEUS_PORT=9464
+set OTEL_EXPORTER_PROMETHEUS_HOST=localhost
+set OTEL_EXPORTER_OTLP_ENDPOINT=http://192.168.56.98:4317
+set OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://192.168.56.98:4317
+set OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://192.168.56.98:4317
+java -jar spring-open-telemetry-2.jar
