@@ -1,6 +1,6 @@
-rootProject.name = 'opentelemetry'
+rootProject.name = '2-opentelemetry'
 
 include 'spring-open-telemetry-1'
 include 'spring-open-telemetry-2'
 include 'spring-manual-open-telemetry-1'
-
+include 'boot-open-telemetry'

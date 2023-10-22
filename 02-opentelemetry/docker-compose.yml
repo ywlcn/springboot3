@@ -18,6 +18,9 @@ services:
     ports:
       - "16686:16686"
       - "14250"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=TRUE
+
 
   collector:
     image: otel/opentelemetry-collector:0.72.0
