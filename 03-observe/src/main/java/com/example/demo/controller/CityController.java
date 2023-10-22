@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.City;
 import com.example.demo.dto.DemoErrorResponse;
 import com.example.demo.service.CityService;
+import io.micrometer.observation.annotation.Observed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Observed(name = "cityController")
 @Controller
 public class CityController {
 

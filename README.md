@@ -1,14 +1,14 @@
-# Spring boot 3
+# [Spring boot 3](https://zhuanlan.zhihu.com/p/574267448)
 
 # １ SpringBoot SpringFramework
 
 - SpringFramework歴史
 
-  ![Spring](.\image\Spring.png)
+  ![Spring](./image/Spring.png)
 
 - SpringFrameworkとSpringBoot
 
-  ![SpringBoot](.\image\SpringBoot.png)
+  ![SpringBoot](./image/SpringBoot.png)
 
 
 
@@ -76,23 +76,7 @@ import javax.servlet.http.HttpServletRequest;
   | GraalVM コミュニティ   | 22.3       |
   | ネイティブビルドツール | 0.9.21     |
 
-## 2.5 Observability OpenTelemetry  TODO
-
-
-
-io.opentelemetry の追加
-
-
-
-https://www.baeldung.com/spring-boot-3-spring-6-new
-
-https://cloud.tencent.com/developer/article/2291988
-
-https://zhuanlan.zhihu.com/p/574267448
-
-
-
-## 2.6 Migrating Projects
+## 2.5 Migrating Projects
 
 - 公式サイトのマイグレーションガイド
 
@@ -108,12 +92,96 @@ https://zhuanlan.zhihu.com/p/574267448
 
   https://docs.openrewrite.org/
 
+## 2.6 OpenTelemetryのサポート 
+
+- io.opentelemetry関連の依存追加
+
+  ```
+  implementation 'io.opentelemetry:opentelemetry-api'
+  ・・・
+  implementation 'io.opentelemetry:opentelemetry-exporter-logging-otlp'
+  ```
+
+- AutoConfigの追加
+
+  ```
+  org.springframework.boot.actuate.autoconfigure.tracing.OpenTelemetryAutoConfiguration
+  org.springframework.boot.actuate.autoconfigure.tracing.otlp.OtlpAutoConfiguration
+  org.springframework.boot.actuate.autoconfigure.metrics.export.otlp.OtlpMetricsExportAutoConfiguration
+  ```
+
+- SpringBoot 3.0で追加した機能であり、どんどん機能を追加している
+
+  https://github.com/spring-projects/spring-boot/issues/37278
+
+## 2.7 Observationのサポート 
+
+- io.micrometer関連の依存追加
+
+  ```
+  implementation 'io.micrometer:micrometer-observation' 
+  ```
+
+- ```Java
+  @Component
+  public class MyCustomObservation {
+  
+      private final ObservationRegistry observationRegistry;
+  
+      public MyCustomObservation(ObservationRegistry observationRegistry) {
+          this.observationRegistry = observationRegistry;
+      }
+  
+      public void doSomething() {
+          Observation.createNotStarted("doSomething", this.observationRegistry)
+              .lowCardinalityKeyValue("locale", "en-US")
+              .highCardinalityKeyValue("userId", "42")
+              .observe(() -> {
+                  // Execute business logic here
+              });
+      }
+  }
+  ```
+
+- ObservationHandler
+
+  ```Java
+  @Component
+  class MyHandler implements ObservationHandler<Observation.Context> {
+  
+      private static final Logger log = LoggerFactory.getLogger(MyHandler.class);
+  
+      @Override
+      public void onStart(Observation.Context context) {
+          log.info("Before running the observation for context [{}], userType [{}]", context.getName(), getUserTypeFromContext(context));
+      }
+  
+      @Override
+      public void onStop(Observation.Context context) {
+          log.info("After running the observation for context [{}], userType [{}]", context.getName(), getUserTypeFromContext(context));
+      }
+  
+      @Override
+      public boolean supportsContext(Observation.Context context) {
+          return true;
+      }
+  
+      private String getUserTypeFromContext(Observation.Context context) {
+          return StreamSupport.stream(context.getLowCardinalityKeyValues().spliterator(), false)
+                  .filter(keyValue -> "userType".equals(keyValue.getKey()))
+                  .map(KeyValue::getValue)
+                  .findFirst()
+                  .orElse("UNKNOWN");
+      }
+  }
+  ```
+
 # 3 GraalVM ネイティブイメージのサポート
 ## 3.1 GraalVMというのは
 
 - GraalVM：Oracle によって開発された Java 仮想マシンの1つで、Java や Kotlin、Scala などの様々な言語の実行や、ネイティブバイナリへの変換が可能なマルチ言語ランタイム環境です。
 
-  ![Graal](.\image\Graal.png)
+  ![Graal](./image/Graal.png)
 
 
 
@@ -126,9 +194,9 @@ https://zhuanlan.zhihu.com/p/574267448
   - 遅延クラスの読み込みはない。実行可能ファイルに同梱されているものはすべて、起動時にメモリに読み込まれます。
   - GraalVM ネイティブイメージは進化するテクノロジーであり、すべてのライブラリがサポートを提供するわけではないので、JITで正常に動作するがAOTでは動作できない可能がある。
 
-![AOT-vs-JIT-memory](.\image\AOT-vs-JIT-memory.png)
+![AOT-vs-JIT-memory](./image/AOT-vs-JIT-memory.png)
 
-![AOT-vs-JIT-start-time](.\image\AOT-vs-JIT-start-time.png)
+![AOT-vs-JIT-start-time](./image/AOT-vs-JIT-start-time.png)
 
 ## 3.2 SpringBootとGraalVM
 
@@ -299,90 +367,212 @@ https://zhuanlan.zhihu.com/p/574267448
 
 - Graalvmの紹介：https://www.slideshare.net/tamrin69/getting-started-graalvm
 
+# ４ OpenTelemetry  TODO
 
+## 4.1 定義
 
+OpenTelemetryは、トレース、メトリック、ログなどのテレメトリデータの作成と管理用に設計された、API、SDK、ツール、および統合のセットです。ベンダーに依存しない実装を提供し、選択したバックエンドにテレメトリーデータを送信する方法を標準化することを目的としています。
 
+主な概念：
 
-# 3 OpenTelemetry  TODO
+- Trace: あるリクエストに対するSpanのまとまり   (一連業務を全部追跡ため)
 
+- Span: リクエスト内の各処理の情報（e.g. 処理名、実行時間、ステータスコードなどなど）   (一つサービス内の追跡)
 
+## 4.2 サンプル(boot)
 
-```
-org.springframework.boot.actuate.autoconfigure.tracing.OpenTelemetryAutoConfiguration
+- 依存関係定義
 
-org.springframework.boot.actuate.autoconfigure.metrics.export.otlp.OtlpMetricsExportAutoConfiguration
-
-
-```
-
-
-
-
-
-https://spring.io/blog/2022/10/12/observability-with-spring-boot-3
-
-https://www.baeldung.com/spring-boot-opentelemetry-setup
-
-- https://github.com/eugenp/tutorials/tree/master/spring-cloud-modules/spring-cloud-open-telemetry
-
-
-
-https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#prometheus-exporter
-
-https://github.com/open-telemetry/opentelemetry-java-examples#java-opentelemetry-examples
-
-https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/examples/extension/README.md
-
-https://opentelemetry.io/docs/instrumentation/java/getting-started/
-
-
-
-```bat
-gradle spring-open-telemetry-1:bootjar
-copy .\spring-open-telemetry-1\build\libs\spring-open-telemetry-1-0.0.1-SNAPSHOT.jar spring-open-telemetry-1.jar
-
-gradle spring-open-telemetry-2:bootjar
-copy .\spring-open-telemetry-2\build\libs\spring-open-telemetry-2-0.0.1-SNAPSHOT.jar spring-open-telemetry-2.jar
-
-set JAVA_TOOL_OPTIONS="-javaagent:lib/opentelemetry-javaagent.jar"
-set OTEL_SERVICE_NAME="product-service"
-set OTEL_METRICS_EXPORTER=prometheus
-set OTEL_EXPORTER_PROMETHEUS_PORT=9464
-set OTEL_EXPORTER_PROMETHEUS_HOST=localhost
-java -jar spring-open-telemetry-1.jar
-
-
-set JAVA_TOOL_OPTIONS="-javaagent:lib/opentelemetry-javaagent.jar"
-set OTEL_SERVICE_NAME="price-service"
-set OTEL_METRICS_EXPORTER=prometheus
-set OTEL_EXPORTER_PROMETHEUS_PORT=9464
-set OTEL_EXPORTER_PROMETHEUS_HOST=localhost
-java -jar spring-open-telemetry-2.jar
-
-
-```
-
-
-
-
-
-
-
-
-
-```bash
-sudo docker run -d --name jaeger \
-  -e COLLECTOR_OTLP_ENABLED=true \
-  -p 16686:16686 \
-  -p 4317:4317 \
-  -p 4318:4318 \
-  jaegertracing/all-in-one:latest
+  ```properties
+  //  spring-boot-autoconfigureもここから推移依存で追加して、OpenTelemetryのAutoConfigが行わる
+  implementation "org.springframework.boot:spring-boot-starter-actuator"
+  // サービス間tracing情報連携する役割
+  implementation "io.micrometer:micrometer-tracing-bridge-otel"
+  // OpenTelemetry形式なデータを取集サーバへ送信する役割
+  implementation "io.opentelemetry:opentelemetry-exporter-otlp"
   
+  ```
+
+- データ連携サーバの設定
+
+  ```yaml
+  management:
+    otlp:
+      tracing:
+        endpoint: http://192.168.56.98:4318/v1/traces
+    tracing:
+      sampling:
+        probability: 1.0
   
+  logging:
+    pattern:
+      level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  ```
+
+- 業務処理の作成、これはあんまり意識が必要ない。通信行う度にデータが送信される
+
+- jaegerサーバの起動
+
+  ```bash
+  sudo docker run -d --name jaeger \
+    -e COLLECTOR_OTLP_ENABLED=true \
+    -p 16686:16686 \
+    -p 4317:4317 \
+    -p 4318:4318 \
+    jaegertracing/all-in-one:latest  
+  ```
+
+## 4.3 サンプル(javaagent)
+
+- 依存関係の追加
+
+  ```properties
+  implementation "io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.31.0"
+  ```
+
+- アプリの設定
+
+  ```Java
+  import io.opentelemetry.instrumentation.annotations.WithSpan;
   
-```
+  @RestController
+  public class PriceController {
+  
+  	@GetMapping(path = "/price/{id}")
+      @WithSpan
+      public Price getPrice(@PathVariable("id") long productId) {
+          LOGGER.info("Getting Price details for Product Id {}", productId);
+          return priceRepository.getPrice(productId);
+    }
+  }
+  ```
+
+- 起動方法
+
+  ```bash
+  set JAVA_TOOL_OPTIONS="-javaagent:lib/opentelemetry-javaagent.jar"
+  set OTEL_SERVICE_NAME="product-service"
+  set OTEL_METRICS_EXPORTER=prometheus
+  set OTEL_EXPORTER_PROMETHEUS_PORT=9464
+  set OTEL_EXPORTER_PROMETHEUS_HOST=localhost
+  set OTEL_EXPORTER_OTLP_ENDPOINT=http://192.168.56.98:4317
+  set OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://192.168.56.98:4317
+  set OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://192.168.56.98:4317
+  java -jar spring-open-telemetry-1.jar
+  
+  set JAVA_TOOL_OPTIONS="-javaagent:lib/opentelemetry-javaagent.jar"
+  set OTEL_SERVICE_NAME="price-service"
+  set OTEL_METRICS_EXPORTER=prometheus
+  set OTEL_EXPORTER_PROMETHEUS_PORT=9464
+  set OTEL_EXPORTER_PROMETHEUS_HOST=localhost
+  set OTEL_EXPORTER_OTLP_ENDPOINT=http://192.168.56.98:4317
+  set OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://192.168.56.98:4317
+  set OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://192.168.56.98:4317
+  java -jar spring-open-telemetry-2.jar
+  ```
+
+  
 
 
+
+
+
+
+
+https://cloud.tencent.com/developer/article/2291988
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 4.4 参考資料
+
+- javaagentを利用する際に、各種Property設定
+
+  https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md
+
+- opentelemetry公式サイトのガイド
+
+  https://opentelemetry.io/docs/instrumentation/java/getting-started/
+
+- SpringBoot trace ガイド
+
+  https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.micrometer-tracing
+
+# ５ Observation
+
+## 4.1 定義
+
+## 4.2 サンプル(Observed )
+
+- @Observed 
+
+  ```java
+  @Observed(name = "cityController")
+  @Controller
+  public class CityController {
+  ```
+
+- 結果　http://localhost:7654/actuator/metrics/cityController
+
+  http://localhost:7654/actuator/metricsで一覧を取得できる
+
+  ```json
+  {
+      "name": "cityController",
+      "baseUnit": "seconds",
+      "measurements": [
+          {
+              "statistic": "COUNT",
+              "value": 1
+          },
+          {
+              "statistic": "TOTAL_TIME",
+              "value": 0.0241112
+          },
+          {
+              "statistic": "MAX",
+              "value": 0.0241112
+          }
+      ],
+      "availableTags": [
+          {
+              "tag": "method",
+              "values": [
+                  "showCities"
+              ]
+          },
+          {
+              "tag": "error",
+              "values": [
+                  "none"
+              ]
+          },
+          {
+              "tag": "class",
+              "values": [
+                  "com.example.demo.controller.CityController"
+              ]
+          }
+      ]
+  }
+  ```
+
+  
+
+
+
+
+
+# ６ graphql
 
 
 
