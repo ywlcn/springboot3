@@ -65,18 +65,7 @@ import javax.servlet.http.HttpServletRequest;
 | Maven        | 3.6.3 以上                |
 | Gradle       | 7.x (7.5 以降) および 8.x |
 
-## 2.4 AOTサポートの提供
-
-- AOTサポートの提供によって、GraalVMへのサポート
-
-- GraalVMバージョンについて
-
-  | 名前                   | バージョン |
-  | :--------------------- | :--------- |
-  | GraalVM コミュニティ   | 22.3       |
-  | ネイティブビルドツール | 0.9.21     |
-
-## 2.5 Migrating Projects
+## 2.4 Migrating Projects
 
 - 公式サイトのマイグレーションガイド
 
@@ -91,6 +80,17 @@ import javax.servlet.http.HttpServletRequest;
 - 汎用的な変換OSS：openrewrite
 
   https://docs.openrewrite.org/
+
+## 2.5 AOTサポートの提供
+
+- AOTサポートの提供によって、GraalVMへのサポート
+
+- GraalVMバージョンについて
+
+  | 名前                   | バージョン |
+  | :--------------------- | :--------- |
+  | GraalVM コミュニティ   | 22.3       |
+  | ネイティブビルドツール | 0.9.21     |
 
 ## 2.6 OpenTelemetryのサポート 
 
@@ -367,7 +367,7 @@ import javax.servlet.http.HttpServletRequest;
 
 - Graalvmの紹介：https://www.slideshare.net/tamrin69/getting-started-graalvm
 
-# ４ OpenTelemetry  TODO
+# ４ OpenTelemetry
 
 ## 4.1 定義
 
@@ -411,7 +411,7 @@ OpenTelemetryは、トレース、メトリック、ログなどのテレメト�
 
 - 業務処理の作成、これはあんまり意識が必要ない。通信行う度にデータが送信される
 
-- jaegerサーバの起動
+- jaegerサーバの起動  http://localhost:8080/product/100001
 
   ```bash
   sudo docker run -d --name jaeger \
@@ -421,6 +421,19 @@ OpenTelemetryは、トレース、メトリック、ログなどのテレメト�
     -p 4318:4318 \
     jaegertracing/all-in-one:latest  
   ```
+  
+  | Port  | Protocol | Component | Function                                                     |
+  | :---- | :------- | :-------- | :----------------------------------------------------------- |
+  | 6831  | UDP      | agent     | accept `jaeger.thrift` over Thrift-compact protocol (used by most SDKs) |
+  | 6832  | UDP      | agent     | accept `jaeger.thrift` over Thrift-binary protocol (used by Node.js SDK) |
+  | 5775  | UDP      | agent     | (deprecated) accept `zipkin.thrift` over compact Thrift protocol (used by legacy clients only) |
+  | 5778  | HTTP     | agent     | serve configs (sampling, etc.)                               |
+  | 16686 | HTTP     | query     | serve frontend                                               |
+  | 4317  | HTTP     | collector | accept OpenTelemetry Protocol (OTLP) over gRPC               |
+  | 4318  | HTTP     | collector | accept OpenTelemetry Protocol (OTLP) over HTTP               |
+  | 14268 | HTTP     | collector | accept `jaeger.thrift` directly from clients                 |
+  | 14250 | HTTP     | collector | accept `model.proto`                                         |
+  | 9411  | HTTP     | collector | Zipkin compatible endpoint (optional)                        |
 
 ## 4.3 サンプル(javaagent)
 
@@ -473,7 +486,7 @@ OpenTelemetryは、トレース、メトリック、ログなどのテレメト�
 
   
 
-
+http://localhost:8080/product/100001
 
 
 

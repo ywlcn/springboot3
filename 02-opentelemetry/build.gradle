@@ -104,6 +104,9 @@ project(':boot-open-telemetry') {
         implementation('org.springframework.boot:spring-boot-starter-webflux') // spring-webflux
         implementation('org.springframework.kafka:spring-kafka')
 
+
+        implementation "io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.31.0"
+
     }
 
 }

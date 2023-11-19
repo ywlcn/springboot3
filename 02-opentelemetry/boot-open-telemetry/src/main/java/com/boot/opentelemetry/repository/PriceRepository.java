@@ -3,6 +3,7 @@ package com.boot.opentelemetry.repository;
 
 import com.boot.opentelemetry.exception.PriceNotFoundException;
 import com.boot.opentelemetry.model.Price;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
