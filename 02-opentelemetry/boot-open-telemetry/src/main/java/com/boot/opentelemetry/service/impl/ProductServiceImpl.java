@@ -14,7 +14,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
-    
+
     @Override
     public Product getProduct(Long productId) {
         return productRepository.getProduct(productId);
