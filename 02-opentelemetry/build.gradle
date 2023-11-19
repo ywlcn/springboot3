@@ -101,6 +101,8 @@ project(':boot-open-telemetry') {
         implementation("org.springframework.boot:spring-boot-starter-actuator");
         implementation "io.micrometer:micrometer-tracing-bridge-otel"
         implementation "io.opentelemetry:opentelemetry-exporter-otlp"
+        implementation('org.springframework.boot:spring-boot-starter-webflux') // spring-webflux
+        implementation('org.springframework.kafka:spring-kafka')
 
     }
 

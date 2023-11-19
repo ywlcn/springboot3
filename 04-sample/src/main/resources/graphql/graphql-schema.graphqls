@@ -1,0 +1,36 @@
+# クエリ定義
+type Query {
+    accountById(accountId: ID): Account
+}
+# タイプ定義
+type ServiceGroup {
+    serviceGroupId: ID!
+    serviceGroupName: String
+    teams: [Team]
+}
+type Team {
+    teamId: ID!
+    teamName: String
+    teamAuthority: String
+    serviceGroup: ServiceGroup!
+}
+type Account {
+    accountId: ID!
+    userName: String
+    age: Int
+    accountType: String
+    serviceGroup: ServiceGroup!
+    team: Team!
+}
+
+# Enum定義
+enum TeamAuthority {
+    PRIVILEGE
+    DEVELOP
+    AUDIT
+}
+enum AccountType {
+    ADMIN
+    DEVELOPER
+    GUEST
+}

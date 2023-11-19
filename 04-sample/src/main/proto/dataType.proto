@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option java_multiple_files = false;
+option java_package = "com.sample.grpc.protodefine";
+
+package com.example.grpc.protodefine;
+
+service DataType {
+
+}
+
+message Cities {
+	repeated City Cities = 1;
+}
+
+message City {
+	string name = 1;
+	int32 population = 2;
+	int32 id = 3;
+	repeated District districts = 4;
+}
+
+message District {
+	string name = 1;
+	int32 id = 2;
+	int32 cityId = 3;
+}
+
+message CommonRequest {
+	string name = 1;
+	string message = 2;
+	int32 age = 3;
+}
+
+message CommonResponse {
+	string message = 1;
+	int32 code = 2;
+}
+

@@ -1,4 +1,4 @@
-package com.example;
+package com.sample;
 
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
@@ -21,10 +21,10 @@ public class ObserverConfig {
 
 
     // To have the @Observed support we need to register this aspect
-//    @Bean
-//    ObservedAspect observedAspect(ObservationRegistry observationRegistry) {
-//        return new ObservedAspect(observationRegistry);
-//    }
+    @Bean
+    ObservedAspect observedAspect(ObservationRegistry observationRegistry) {
+        return new ObservedAspect(observationRegistry);
+    }
 
 
 

@@ -1,9 +1,8 @@
 server:
-  port: 8082
-
+  port: 8080
 
 priceClient:
-  baseUrl: http://localhost:8082
+  baseUrl: http://localhost:8080
 
 spring:
   application:

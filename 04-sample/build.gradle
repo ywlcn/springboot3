@@ -1,0 +1,117 @@
+
+plugins {
+	id "java"
+	id "org.springframework.boot" version "${springBootVersion}"
+	id "io.spring.dependency-management" version "1.1.3"
+//	id "com.google.protobuf" version "${protobufGradlePluginVersion}"
+}
+
+group = "com.sample"
+version = "0.0.1-SNAPSHOT"
+
+java {
+	sourceCompatibility = "17"
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	implementation "org.springframework.boot:spring-boot-starter-cache"
+	implementation "org.springframework.boot:spring-boot-starter-graphql"
+	implementation "org.springframework.boot:spring-boot-starter-mustache"
+	implementation "org.springframework.boot:spring-boot-starter-webflux"
+
+	// opentelemetry prometheus
+	implementation "io.micrometer:micrometer-registry-prometheus"
+	//implementation "io.micrometer:micrometer-tracing-bridge-brave"
+	implementation "io.micrometer:micrometer-tracing-bridge-otel"
+	implementation "io.opentelemetry:opentelemetry-exporter-otlp"
+
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+//	implementation "org.springframework.boot:spring-boot-starter-data"
+	implementation "org.springframework.boot:spring-boot-starter-aop"
+	implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+	implementation "org.springframework.boot:spring-boot-starter-actuator"
+
+	// lombok
+	compileOnly "org.projectlombok:lombok"
+	annotationProcessor "org.projectlombok:lombok"
+
+	// mybatis
+	implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringBootStarter}"
+	//runtimeOnly "org.hsqldb:hsqldb"
+	runtimeOnly "com.h2database:h2"
+
+	// logback
+	implementation "ch.qos.logback:logback-access"
+	implementation "ch.qos.logback:logback-classic"
+
+	// grpc
+	implementation 'io.github.lognet:grpc-spring-boot-starter:5.1.5'
+	//implementation "io.grpc:grpc-netty:${grpcVersion}"
+	//implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+	//implementation "io.grpc:grpc-stub:${grpcVersion}"
+	//implementation "io.grpc:grpc-services:${grpcVersion}"
+	implementation "com.google.protobuf:protobuf-java-util:3.25.0"
+	compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
+	//runtimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.20.Final'
+
+	// mapstruct
+	implementation "org.mapstruct:mapstruct:1.5.5.Final"
+
+}
+
+def defaultEncoding = "UTF-8"
+tasks.withType(AbstractCompile).each { it.options.encoding = defaultEncoding }
+
+tasks.named("test") {
+	useJUnitPlatform()
+}
+
+sourceSets {
+	main {
+//		proto {
+//			srcDir "src/main/proto"
+//		}
+		java {
+			srcDir "src/main/java"
+		}
+	}
+}
+
+//protobuf {
+//	protoc {
+//		artifact = "com.google.protobuf:protoc:${protocVersion}"
+//	}
+//	plugins {
+//		grpc {
+//			artifact = "io.grpc:protoc-gen-grpc-java:${protocGenGrpcJavaVersion}"
+//		}
+////		javalite {
+////			// The codegen for lite comes as a separate artifact
+////			artifact = "com.google.protobuf:protoc-gen-javalite:${protocGenJavalite}"
+////		}
+//	}
+//
+//	generateProtoTasks {
+//		ofSourceSet("main").forEach { task->
+//			task.builtins {
+//				java {
+//					//option "lite"
+//					outputSubDir = "java"
+//				}
+//			}
+//			task.plugins {
+//				grpc {
+//					outputSubDir = "java"
+//				}
+////				javalite { }
+//			}
+//		}
+//	}
+//	generatedFilesBaseDir = "$projectDir/src"
+//}

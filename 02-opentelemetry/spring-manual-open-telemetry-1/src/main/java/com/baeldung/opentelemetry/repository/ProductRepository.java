@@ -2,10 +2,12 @@ package com.baeldung.opentelemetry.repository;
 
 import com.baeldung.opentelemetry.exception.ProductNotFoundException;
 import com.baeldung.opentelemetry.model.Product;
+import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.instrumentation.annotations.SpanAttribute;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
@@ -19,6 +21,8 @@ public class ProductRepository {
 
     private final Map<Long, Product> productMap = new HashMap<>();
 
+    @Autowired
+    OpenTelemetry openTelemetry;
 
     @WithSpan
     public Product getProduct(@SpanAttribute("productId") Long productId){
@@ -49,8 +53,8 @@ public class ProductRepository {
         productMap.put(100005L, product5);
     }
 
-    private static Product getProduct(int id, String name) {
-        Product product = new Product(id ,name, );
+    private Product getProduct(int id, String name) {
+        Product product = new Product(id ,name, openTelemetry);
         return product;
     }
 }

@@ -18,7 +18,10 @@
         </format>
     </appender>
 
+
+
+
     <root level="INFO">
-        <appender-ref ref="LOKI"/>
+        <appender-ref ref="LOKI1"/>
     </root>
 </configuration>

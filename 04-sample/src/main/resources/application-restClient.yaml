@@ -1,0 +1,87 @@
+
+rest-server: ${REST_SERVER:localhost:8080}
+
+server:
+  error:
+    include-exception: true
+    include-stacktrace: ALWAYS
+    include-binding-errors: ALWAYS
+  port: 8080
+
+#server.error.whitelabel.enabled
+spring:
+  datasource:
+#    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+#    url: jdbc:hsqldb:mem:testdb;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=1;DB_CLOSE_ON_EXIT=FALSE;MODE=DB2
+    username: sa
+    password:
+    initialize: true
+  jpa:
+    hibernate:
+      ddl-auto: create
+  sql:
+    init:
+      platform: h2
+#      schema-locations:
+#      data-locations:
+  h2:
+    console:
+      # enable access from http://localhost:8080/h2-console
+      enabled: true
+  application:
+    name: Sample
+
+  # データソース定義は省略
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiqls
+
+mybatis:
+  #type-aliases-package: com.example.domain.model
+  #type-handlers-package: com.example.typehandler
+  configuration:
+    map-underscore-to-camel-case: true
+    default-statement-timeout: 100
+    default-fetch-size: 30
+
+management:
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            # For Exemplars to work we need histogram buckets
+            requests: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    sampling:
+      # All traces should be sent to latency analysis tool
+      probability: 1.0
+  endpoint:
+    health:
+      show-components: always
+      show-details: always
+  # Generic OpenTelemetry configuration (partially shared between metrics and traces)
+  opentelemetry:
+    resource-attributes:
+      application: ${spring.application.name}
+      cluster: local
+      # Micrometer Metrics configures this attribute with "unknown value".
+      # It should probably be autoconfigured correctly by Spring Boot.
+      "service.name": ${spring.application.name}
+  otlp:
+    tracing:
+      endpoint: ${OTLP_END_POINT:http://192.168.56.98:4318/v1/traces}
+
+logging:
+  pattern:
+    # traceID and spanId are predefined MDC keys - we want the logs to include them
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+

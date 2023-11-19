@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package grpc.testing;
+
+option java_package = "com.sample.grpc.protodefine";
+option java_outer_classname = "SunServiceProto";
+option java_multiple_files = false;
+
+// A Sun service for test.
+service SunService {
+  // Sun unary RPC.
+  rpc UnaryRpc (SunRequest) returns (SunResponse) {}
+
+  // Sun client-to-server streaming RPC.
+  rpc ClientStreamingRpc (stream SunRequest) returns (SunResponse) {}
+
+  // Sun server-to-client streaming RPC.
+  rpc ServerStreamingRpc (SunRequest) returns (stream SunResponse) {}
+
+  // Sun bidirectional streaming RPC.
+  rpc BidiStreamingRpc (stream SunRequest) returns (stream SunResponse) {}
+}
+
+// A Sun request message type for test.
+message SunRequest {
+  // An optional string message for test.
+  string requestMessage = 1;
+}
+
+// A Sun response message type for test.
+message SunResponse {
+  // An optional string message for test.
+  string responseMessage = 1;
+}
