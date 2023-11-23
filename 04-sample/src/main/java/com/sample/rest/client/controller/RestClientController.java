@@ -1,31 +1,17 @@
 package com.sample.rest.client.controller;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 //import org.dozer.Mapper;
-import com.sample.dto.City;
-import com.sample.grpc.protodefine.Helloworld;
-import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sample.grpc.client.utl.GrpcConfig;
-import com.sample.grpc.protodefine.HelloWorldGrpc;
-import com.sample.grpc.protodefine.Helloworld.PerforData;
-import com.sample.grpc.util.dto.UserInfo;
-
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @Observed(name = "RestClientController")
 @RestController

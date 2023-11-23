@@ -2,7 +2,10 @@ package com.sample.grpc.client.utl;
 
 import java.util.concurrent.TimeUnit;
 
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +21,11 @@ public class GrpcConfig implements DisposableBean {
 	@Value("${test.grpc.hostname:localhost}")
 	private String hostname;
 
-	@Value("${test.grpc.port:9002}")
+	@Value("${test.grpc.port:6565}")
 	private int port;
+
+	@Autowired
+	OpenTelemetry openTelemetry;
 
 	private ManagedChannel channel = null;
 
@@ -45,13 +51,14 @@ public class GrpcConfig implements DisposableBean {
 	public ManagedChannel createChannel(String hostname, int port, ClientInterceptor clientInterceptor) {
 		ManagedChannelBuilder<?> managerdChannelBuilder = null;
 
+		GrpcTelemetry grpcTelemetry = GrpcTelemetry.create(openTelemetry);
+
 		if (clientInterceptor == null) {
-			managerdChannelBuilder = ManagedChannelBuilder.forAddress(hostname, port);
+			managerdChannelBuilder = ManagedChannelBuilder.forAddress(hostname, port).intercept(grpcTelemetry.newClientInterceptor());
 		} else {
-			managerdChannelBuilder = ManagedChannelBuilder.forAddress(hostname, port).intercept(clientInterceptor);
+			managerdChannelBuilder = ManagedChannelBuilder.forAddress(hostname, port).intercept(clientInterceptor , grpcTelemetry.newClientInterceptor());
 		}
 //		ManagedChannel channel = managerdChannelBuilder.intercept(new HelloClientInterceptor()).usePlaintext().enableRetry().build();
-
 		ManagedChannel channel = managerdChannelBuilder.intercept().usePlaintext().enableRetry().build();
 		return channel;
 	}

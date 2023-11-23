@@ -1,4 +1,4 @@
-package com.sample.demo.dao.mapper;
+package com.sample.business.mapper;
 
 import com.sample.dto.City;
 import org.apache.ibatis.annotations.Mapper;

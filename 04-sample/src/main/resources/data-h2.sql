@@ -24,6 +24,9 @@ INSERT INTO district(name, cityId) VALUES('district302', 3);
 INSERT INTO district(name, cityId) VALUES('district303', 3);
 INSERT INTO district(name, cityId) VALUES('district304', 3);
 
+
+
+
 INSERT INTO service_group(service_group_id, service_group_name) VALUES('001', 'Service101');
 INSERT INTO service_group(service_group_id, service_group_name) VALUES('002', 'Service102');
 

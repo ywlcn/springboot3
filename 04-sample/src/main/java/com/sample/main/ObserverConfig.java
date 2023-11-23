@@ -1,4 +1,4 @@
-package com.sample;
+package com.sample.main;
 
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;

@@ -1,6 +1,5 @@
 package com.sample.grpc.client.controller;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,8 +9,9 @@ import java.util.concurrent.TimeUnit;
 //import org.dozer.Mapper;
 import com.sample.grpc.protodefine.Helloworld;
 import io.grpc.stub.StreamObserver;
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sample.grpc.client.utl.GrpcConfig;
 import com.sample.grpc.protodefine.HelloWorldGrpc;
 import com.sample.grpc.protodefine.Helloworld.PerforData;
-import com.sample.grpc.util.dto.UserInfo;
+import com.sample.dto.UserInfo;
 
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/grpc")
@@ -31,12 +30,11 @@ public class GrpcClientController {
 	@Autowired
 	GrpcConfig grpcConfig;
 
-	private static WebClient client = WebClient.create("http://192.168.56.102:30081");
-
 	@RequestMapping("/user")
 	@ResponseBody
 	public UserInfo grpc() {
-		// Jmeterから受信して、gRPC通信を行う
+
+		// 受信して、gRPC通信を行う
 		PerforData request = PerforData.newBuilder().setName("Tom").setAddress("Tokyo yokohama japan").setId("00000012")
 				.setSex("male").setTel("090-3902-81444").build();
 

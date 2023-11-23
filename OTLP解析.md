@@ -167,11 +167,157 @@ result = {NamesEnumerator@9383}
 
 
 
+# 4. ポイント
+
+## 4.1 HttpServer
+
+### (1) Filter
+
+```Java
+ServerHttpObservationFilter
+```
 
 
 
+## 4.2 RestClient
+
+### (1) RestTemplate
+
+```Java
+@Bean
+public RestTemplate restTemplate(RestTemplateBuilder builder) {
+    return builder.build();
+}
+```
+
+```java
+	protected <T> T doExecute(URI url, @Nullable String uriTemplate, @Nullable HttpMethod method, @Nullable RequestCallback requestCallback,
+			@Nullable ResponseExtractor<T> responseExtractor) throws RestClientException {
+
+		Assert.notNull(url, "url is required");
+		Assert.notNull(method, "HttpMethod is required");
+		ClientHttpRequest request;
+		try {
+			request = createRequest(url, method);
+		}
+		catch (IOException ex) {
+			ResourceAccessException exception = createResourceAccessException(url, method, ex);
+			throw exception;
+		}
+		ClientRequestObservationContext observationContext = new ClientRequestObservationContext(request);
+		observationContext.setUriTemplate(uriTemplate);
+		Observation observation = ClientHttpObservationDocumentation.HTTP_CLIENT_EXCHANGES.observation(this.observationConvention,
+				DEFAULT_OBSERVATION_CONVENTION, () -> observationContext, this.observationRegistry).start();
+		ClientHttpResponse response = null;
+		try {
+			if (requestCallback != null) {
+				requestCallback.doWithRequest(request);
+			}
+			response = request.execute();
+			observationContext.setResponse(response);
+			handleResponse(url, method, response);
+			return (responseExtractor != null ? responseExtractor.extractData(response) : null);
+		}
+		catch (IOException ex) {
+			ResourceAccessException exception = createResourceAccessException(url, method, ex);
+			observation.error(exception);
+			throw exception;
+		}
+		catch (RestClientException exc) {
+			observation.error(exc);
+			throw exc;
+		}
+		finally {
+			if (response != null) {
+				response.close();
+			}
+			observation.stop();
+		}
+	}
+```
 
 
+
+### (2) WebClient
+
+```Java
+org.springframework.web.reactive.function.client.DefaultWebClient
+```
+
+```Java
+@Bean
+public WebClient webClient(WebClient.Builder builder) {
+    return builder.build();
+}
+```
+
+```Java
+		@SuppressWarnings("deprecation")
+		@Override
+		public Mono<ClientResponse> exchange() {
+			ClientRequestObservationContext observationContext = new ClientRequestObservationContext();
+			ClientRequest.Builder requestBuilder = initRequestBuilder();
+			return Mono.deferContextual(contextView -> {
+				Observation observation = ClientHttpObservationDocumentation.HTTP_REACTIVE_CLIENT_EXCHANGES.observation(observationConvention,
+						DEFAULT_OBSERVATION_CONVENTION, () -> observationContext, observationRegistry);
+				observationContext.setCarrier(requestBuilder);
+				observation
+						.parentObservation(contextView.getOrDefault(ObservationThreadLocalAccessor.KEY, null))
+						.start();
+				ExchangeFilterFunction filterFunction = new ObservationFilterFunction(observationContext);
+				if (filterFunctions != null) {
+					filterFunction = filterFunctions.andThen(filterFunction);
+				}
+				ClientRequest request = requestBuilder.build();
+				observationContext.setUriTemplate((String) request.attribute(URI_TEMPLATE_ATTRIBUTE).orElse(null));
+				observationContext.setRequest(request);
+				Mono<ClientResponse> responseMono = filterFunction.apply(exchangeFunction)
+						.exchange(request)
+						.checkpoint("Request to " + this.httpMethod.name() + " " + this.uri + " [DefaultWebClient]")
+						.switchIfEmpty(NO_HTTP_CLIENT_RESPONSE_ERROR);
+				if (this.contextModifier != null) {
+					responseMono = responseMono.contextWrite(this.contextModifier);
+				}
+				final AtomicBoolean responseReceived = new AtomicBoolean();
+				return responseMono
+						.doOnNext(response -> responseReceived.set(true))
+						.doOnError(observationContext::setError)
+						.doFinally(signalType -> {
+							if (signalType == SignalType.CANCEL && !responseReceived.get()) {
+								observationContext.setAborted(true);
+							}
+							observation.stop();
+						})
+						.contextWrite(context -> context.put(ObservationThreadLocalAccessor.KEY, observation));
+			});
+		}
+```
+
+
+
+## 4.3 gRPC
+
+```
+implementation 'io.opentelemetry.instrumentation:opentelemetry-grpc-1.6:1.32.0-alpha'
+```
+
+### (1) client
+
+```
+GrpcTelemetry grpcTelemetry = GrpcTelemetry.create(openTelemetry);
+ManagedChannelBuilder.forAddress(hostname, port).intercept(grpcTelemetry.newClientInterceptor());
+```
+
+### (2) server
+
+```Java
+@Bean
+@GRpcGlobalInterceptor
+public ServerInterceptor gRPCTracingServerInterceptor(OpenTelemetry openTelemetry) throws Exception {
+    GrpcTelemetry grpcTelemetry = GrpcTelemetry.create(openTelemetry);
+    return grpcTelemetry.newServerInterceptor();
+}
+```
 
 
 

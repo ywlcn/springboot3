@@ -1,4 +1,4 @@
-package com.sample.demo.dao;
+package com.sample.business.dao;
 
 public interface DistrictDao {
 }

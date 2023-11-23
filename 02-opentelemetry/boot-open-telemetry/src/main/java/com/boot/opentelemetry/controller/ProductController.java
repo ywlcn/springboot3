@@ -4,6 +4,7 @@ import com.boot.opentelemetry.client.PriceClient;
 import com.boot.opentelemetry.model.Product;
 import com.boot.opentelemetry.repository.ProductRepository;
 import com.boot.opentelemetry.service.ProductService;
+import io.micrometer.observation.annotation.Observed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Observed(name = "ProductController")
 public class ProductController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);

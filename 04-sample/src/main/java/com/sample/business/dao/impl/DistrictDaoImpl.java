@@ -1,6 +1,6 @@
-package com.sample.demo.dao.impl;
+package com.sample.business.dao.impl;
 
-import com.sample.demo.dao.DistrictDao;
+import com.sample.business.dao.DistrictDao;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.stereotype.Component;
 

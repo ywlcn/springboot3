@@ -1,4 +1,4 @@
-package com.sample.grpc.util.dto;
+package com.sample.dto;
 
 public class UserInfo {
 

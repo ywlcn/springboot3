@@ -2,7 +2,7 @@ package com.sample.demo.controller;
 
 import com.sample.dto.City;
 import com.sample.dto.DemoErrorResponse;
-import com.sample.demo.service.CityService;
+import com.sample.business.service.CityService;
 import io.micrometer.observation.annotation.Observed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

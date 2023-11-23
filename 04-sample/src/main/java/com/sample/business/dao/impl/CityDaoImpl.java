@@ -1,11 +1,10 @@
-package com.sample.demo.dao.impl;
+package com.sample.business.dao.impl;
 
-import com.sample.demo.dao.CityDao;
+import com.sample.business.dao.CityDao;
 import com.sample.dto.City;
-import com.sample.demo.dao.mapper.CityMapper;
+import com.sample.business.mapper.CityMapper;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
