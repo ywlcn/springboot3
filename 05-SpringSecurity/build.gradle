@@ -69,6 +69,32 @@ project(":02-SpringSecurityRest") {
 }
 
 
+project(":03-SpringSecurityOAuth2") {
+
+    dependencies {
+
+        implementation project(":00-SpringSecurityUtils")
+        implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+
+    }
+}
+
+
+
+project(":04-SpringSecuritySAML2") {
+
+    dependencies {
+
+        implementation project(":00-SpringSecurityUtils")
+        implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+
+    }
+}
+
+
+
+
+
 
 
 

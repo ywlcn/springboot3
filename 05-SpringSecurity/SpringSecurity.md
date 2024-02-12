@@ -13,7 +13,7 @@ SpringSecurity
     - CSRF   COR
     - セキュリティヘッダ出力機能
 
-
+https://spring.pleiades.io/spring-security/reference/servlet/architecture.html
 
 # 2. アーキテクチャ
 
