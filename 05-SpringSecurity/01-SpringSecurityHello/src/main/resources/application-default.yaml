@@ -7,7 +7,9 @@ spring:
 
 logging:
   level:
-    web: DEBUG
+    #web: DEBUG
+    org.springframework.security.web: DEBUG
+
 #    org.springframework: DEBUG
 #
 #2024-02-10T12:49:30.940+09:00 DEBUG 10308 --- [SpringSecurityHello] [           main] o.s.b.w.s.ServletContextInitializerBeans : Mapping filters: springSecurityFilterChain urls=[/*] order=-100, characterEncodingFilter urls=[/*] order=-2147483648, formContentFilter urls=[/*] order=-9900, requestContextFilter urls=[/*] order=-105

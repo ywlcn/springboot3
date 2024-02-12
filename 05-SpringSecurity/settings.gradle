@@ -2,3 +2,4 @@ rootProject.name = '05-SpringSecurity'
 
 include '00-SpringSecurityUtils'
 include '01-SpringSecurityHello'
+include '02-SpringSecurityRest'

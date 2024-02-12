@@ -1,12 +1,11 @@
+
 server:
-  port: 8080
-
-priceClient:
-  baseUrl: http://localhost:8080
-
-spring:
-  application:
-    name: boot-auto-otlp-service
+  error:
+    whitelabel:
+      enabled: true
+    include-message: ALWAYS
+    include-stacktrace: ALWAYS
+    include-exception: true
 
 management:
   endpoints:
@@ -17,24 +16,3 @@ management:
     health:
       show-components: always
       show-details: always
-
-  # Generic OpenTelemetry configuration (partially shared between metrics and traces)
-  opentelemetry:
-    resource-attributes:
-      application: ${spring.application.name}
-      cluster: local
-      # Micrometer Metrics configures this attribute with "unknown value".
-      # It should probably be autoconfigured correctly by Spring Boot.
-      "service.name": ${spring.application.name}
-  tracing:
-    sampling:
-      probability: 1.0
-  # Traces-specific OpenTelemetry configuration
-  otlp:
-    tracing:
-      endpoint: http://192.168.56.98:4318/v1/traces
-
-
-logging:
-  pattern:
-    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
