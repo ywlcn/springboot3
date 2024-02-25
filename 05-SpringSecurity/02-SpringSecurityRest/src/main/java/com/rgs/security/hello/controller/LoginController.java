@@ -1,6 +1,6 @@
-package com.rgs.security.rest.controller;
+package com.rgs.security.hello.controller;
 
-import com.rgs.security.rest.entity.UserEntity;
+import com.rgs.security.hello.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

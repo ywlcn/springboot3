@@ -93,6 +93,17 @@ project(":04-SpringSecuritySAML2") {
 
 
 
+project(":99-SpringSecurityTest") {
+
+    dependencies {
+        implementation project(":00-SpringSecurityUtils")
+
+
+        implementation "org.springframework.session:spring-session-jdbc"
+        implementation "org.springframework.session:spring-session"
+        implementation "org.springframework.session:spring-core"
+    }
+}
 
 
 

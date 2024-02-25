@@ -1,6 +1,6 @@
-package com.rgs.security.rest.configuration;
+package com.rgs.security.hello.configuration;
 
-import com.rgs.security.rest.filter.MyAuthorizeFilter;
+import com.rgs.security.hello.filter.MyAuthorizeFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -77,13 +77,13 @@ public class SecurityConfiguration {
     public UserDetailsService userDetailsService() {
         UserDetails userDetails = User.withDefaultPasswordEncoder()
                 .username("user")
-                .password("password")
+                .password("123456")
                 .roles("normal")
                 .build();
 
         UserDetails adminDetails = User.withDefaultPasswordEncoder()
                 .username("admin")
-                .password("password")
+                .password("123456")
                 .roles("admin")
                 .build();
 

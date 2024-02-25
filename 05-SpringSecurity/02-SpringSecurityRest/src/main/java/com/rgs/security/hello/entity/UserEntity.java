@@ -1,4 +1,4 @@
-package com.rgs.security.rest.entity;
+package com.rgs.security.hello.entity;
 
 import lombok.Data;
 

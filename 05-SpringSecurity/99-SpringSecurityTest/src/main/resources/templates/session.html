@@ -1,0 +1,18 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<head>
+    <title>Hello Security!</title>
+</head>
+<body>
+<h1>Hello Security</h1>
+<a th:href="@{/logout}">Log Out</a>
+
+<form action="csrf" method="POST">
+    <textarea name="text"></textarea><br>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    <input type="submit">
+    <p th:text="|CSRFトーク: ${_csrf.token}|" />
+</form>
+
+</body>
+</html>

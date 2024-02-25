@@ -1,4 +1,4 @@
-package com.rgs.security.rest.controller;
+package com.rgs.security.hello.controller;
 
 
 import org.springframework.http.HttpStatus;

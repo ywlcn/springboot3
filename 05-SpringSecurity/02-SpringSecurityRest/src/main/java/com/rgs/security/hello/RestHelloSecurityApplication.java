@@ -1,14 +1,13 @@
-package com.rgs.security.rest;
+package com.rgs.security.hello;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HelloSecurityApplication {
+public class RestHelloSecurityApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HelloSecurityApplication.class, args);
+        SpringApplication.run(RestHelloSecurityApplication.class, args);
     }
-
 
 }

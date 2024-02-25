@@ -1,6 +1,6 @@
-package com.rgs.security.rest.filter;
+package com.rgs.security.hello.filter;
 
-import com.rgs.security.rest.configuration.SecurityConfiguration;
+import com.rgs.security.hello.configuration.SecurityConfiguration;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
