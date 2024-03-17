@@ -55,7 +55,7 @@ https://spring.pleiades.io/spring-security/reference/servlet/architecture.html
 
   ログイン済みの場合にはSessionからログイン済み情報をSecurityContextに関連する
 
-- org.springframework.security.web.header.HeaderWriterFilter（★）  Insecure（？）
+- org.springframework.security.web.header.HeaderWriterFilter
 
   HTTPレスポンスヘッダーにセキュリティ関係のものを付与するフィルター(HttpSecurityからカスタマイズ可能)
 
@@ -85,15 +85,16 @@ https://spring.pleiades.io/spring-security/reference/servlet/architecture.html
   addIfNotNull(writers, this.crossOriginResourcePolicy.writer);　　　　　　　Cross-Origin-Resource-Policy
   ```
 
-- org.springframework.web.filter.CorsFilter（★）
+- org.springframework.web.filter.CorsFilter
 
-  ???????????????????
+  - PreFlightRequest対応のため
+  - Security設定に設定したCors設定をレスポンスヘッダに追加
 
-- org.springframework.security.web.csrf.CsrfFilter（★）
+- org.springframework.security.web.csrf.CsrfFilter
 
-  ???????????????????
+  Csrfのチェック
 
-- org.springframework.security.web.authentication.logout.LogoutFilter（★）
+- org.springframework.security.web.authentication.logout.LogoutFilter
 
   ログアウト時動作される（ログイン画面でログアウトボタンが押下される場合）
 
@@ -117,7 +118,7 @@ https://spring.pleiades.io/spring-security/reference/servlet/architecture.html
 
 - org.springframework.security.web.authentication.www.BasicAuthenticationFilter（★）
 
-  ???????????????????
+  ヘッダに認証情報がある場合に、取得して認証を行う。
 
 - org.springframework.security.web.savedrequest.RequestCacheAwareFilter
 
@@ -153,26 +154,6 @@ https://spring.pleiades.io/spring-security/reference/servlet/architecture.html
 
 
 
-
-
-## 2.x セキュリティ例外の処理
-
-
-
-
-
-
-
-```java
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.headers()
-            .addHeaderWriter(new StaticHeadersWriter("x-neko", "nyan"))
-    }
-```
-
-
-
 ## 2.3パスワードの生成
 
 ```plain
@@ -181,37 +162,32 @@ org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoCo
 Using generated security password: 14b31fe3-0aef-4441-a977-1bb44cc591fb
 ```
 
-
-
-
-
 # 3. 各種セキュリティ対策
 
 ## 3.1 [セッション管理の不備](https://www.ipa.go.jp/security/vuln/websecurity/session-management.html)
 
-- セッションIDを推測が困難なものにする
+### 3.1.1 セッションID生成
 
-  SpringSessionではSessionId生成のカスタマイズを提供している　　 <検証>
+- SpringSessionではSessionId生成のカスタマイズを提供している（SpringBoot >= 3.2.1）
 
   ```java
   @Bean
   public SessionIdGenerator sessionIdGenerator() {
-      return new MySessionIdGenerator();
+  	return new MySessionIdGenerator();
   }
-  
+  	
   class MySessionIdGenerator implements SessionIdGenerator {
-  
-      @Override
-      public String generate() {
-          // ...
-      }
-  
+  	
+  	@Override
+  	public String generate() {
+  	    // ...
+  	}
   }
   ```
 
 - セッションIDをURLパラメータに格納しない
 
-  
+  URLパラメータにセッションIDが含まれる場合、そのURLを公開してしまったり、攻撃者のサイトへのリンクを踏むことでrefererから漏洩する可能性があります。
 
 - HTTPS通信で利用するCookieにはsecure属性を加える
 
@@ -226,17 +202,17 @@ Using generated security password: 14b31fe3-0aef-4441-a977-1bb44cc591fb
   - SpringSession
 
     ```java
-        @Bean
-        public CookieSerializer cookieSerializer() {
-            DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-            serializer.setCookieName("JSESSIONID");
-            serializer.setCookiePath("/");
-            serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$");
-            serializer.setUseSecureCookie(true);
-            return serializer;
-        }
-    ```
-
+    @Bean
+    public CookieSerializer cookieSerializer() {
+        DefaultCookieSerializer serializer = new DefaultCookieSerializer();
+        serializer.setCookieName("JSESSIONID");
+        serializer.setCookiePath("/");
+        serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$");
+        // HTTPS プロトコル上の暗号化されたリクエストでのみサーバーに送信され、安全でない HTTP では決して送信されない
+        serializer.setUseSecureCookie(true);
+        return serializer;
+    }
+  ```
     
 
 - セッションID固定化攻撃
@@ -249,12 +225,6 @@ Using generated security password: 14b31fe3-0aef-4441-a977-1bb44cc591fb
   | 2    | `migrateSession`  | ログイン前に使用していたセッションを破棄し、新たにセッションを作成する。このオプションを使用すると、ログイン前にセッションに格納されていたオブジェクトは新しいセッションに引き継がれる。(Servlet 3.0以下のコンテナ上でのデフォルトの動作の動作である) <br>#1と同じ見た目が、内部的にコピーの作業がある。性能改善のために#1にシフトしているかな |
   | 3    | `newSession`      | このオプションは`migrateSession`と同じ方法でセッションIDを変更するが、ログイン前に格納されていたオブジェクトは新しいセッションに引き継がれない。 |
   | 4    | `none`            | Spring Securityは、セッションIDを変更しない。                |
-
-
-
-
-
-
 
 
 ## 3.2 CSRF(Cross site request forgeries)対策
@@ -320,9 +290,25 @@ CSRF対策が行われていないWebアプリケーションを利用すると�
   </form>
   ```
 
-ヘッダ？？？
+### 3.2.2 SpringSessionの対策
 
+- 例
 
+  ```java
+  @Bean
+  public CookieSerializer cookieSerializer() {
+      DefaultCookieSerializer serializer = new DefaultCookieSerializer();
+      serializer.setCookieName("JSESSIONID");
+      serializer.setCookiePath("/");
+      serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$");
+      // HttpOnly 属性を使用して、 JavaScript から Cookie の値にアクセスすることを防ぎます。
+      // JavaScript の Document.cookie API にはアクセスできませんこの予防策は、クロスサイトスクリプティング (XSS) 攻撃を緩和するのに役立ちます。
+      serializer.setUseHttpOnlyCookie(true);
+      // Strict:元のサイトのみ送信    Lax：別のサイトから来たときにも   None：どちらも送信
+      serializer.setSameSite(""); //
+      return serializer;
+  }
+  ```
 
 ## 3.3 XSS(Cross-site scripting)対策
 
@@ -357,7 +343,9 @@ CSRF対策が行われていないWebアプリケーションを利用すると�
   Content-Security-Policy-Report-Only: default-src 'none'; style-src cdn.example.com; report-uri /_/csp-reports
   ```
 
-### 3.2.3
+- Httpヘッダの対応　　`HttpOnly`　
+
+### 3.2.3 XSS VS CSRF
 
 - XSSはユーザーのブラウザ内でスクリプトを実行することに焦点を当て（スクリプトの実施することで何でもできる・・・）
 - CSRFは認証されたユーザーのリクエストを悪用して不正な操作を行わせることに焦点を当て(正式なサーバへ意識せずな操作が行ってしまう)
@@ -381,4 +369,4 @@ CSRF対策が行われていないWebアプリケーションを利用すると�
 
 
 
-# 4. 
+# 4. Keycloak + SpringSecurity

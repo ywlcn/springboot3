@@ -1,0 +1,17 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: SpringSecurityOAuth2-google
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 75752582224-mpehrvvbkviqkfscikbto3asi6h34hvo.apps.googleusercontent.com
+            client-secret: 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
+
+logging:
+  level:
+    web: DEBUG

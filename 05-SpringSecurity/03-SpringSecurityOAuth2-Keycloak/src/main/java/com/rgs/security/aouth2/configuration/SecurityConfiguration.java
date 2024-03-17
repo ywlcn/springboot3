@@ -41,27 +41,14 @@ public class SecurityConfiguration {
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtDecoder jwtDecoder) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers(PERMIT_ALL_URL).permitAll()
-                                .requestMatchers("admin").hasRole("admin")
                                 .anyRequest().authenticated()
 
-                )
-//                .csrf((csrf) -> csrf.ignoringRequestMatchers("/token"))
-//                .httpBasic(Customizer.withDefaults())
-                .oauth2ResourceServer(jwt -> {
-                    jwt.jwt(Customizer.withDefaults());
-                })
-//                .addFilterAfter(new MyAuthorizeFilter(jwtDecoder), HeaderWriterFilter.class)
-                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf(AbstractHttpConfigurer::disable)
-                .logout(AbstractHttpConfigurer::disable);
-
-        //                .exceptionHandling((exceptions) -> exceptions
-//                                .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-//                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+                );
+        http.oauth2Login(Customizer.withDefaults());
         return http.build();
     }
 

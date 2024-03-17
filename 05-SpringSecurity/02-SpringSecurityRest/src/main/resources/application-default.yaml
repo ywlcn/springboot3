@@ -6,7 +6,7 @@ spring:
 
 logging:
   level:
-    web: DEBUG
+    root: DEBUG
 
 jwt:
   private.key: classpath:app.key
