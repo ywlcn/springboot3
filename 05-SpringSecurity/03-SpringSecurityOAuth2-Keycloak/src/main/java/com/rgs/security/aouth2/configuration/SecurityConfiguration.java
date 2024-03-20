@@ -1,41 +1,23 @@
 package com.rgs.security.aouth2.configuration;
 
+import com.rgs.security.aouth2.service.dto.MyOidcUser;
+import com.rgs.security.aouth2.service.WebOidcUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
-
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.web.header.HeaderWriterFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
     public final static String LOGIN_URL = "/login";
-    public final static String HEADER_AUTH_KEY = "X-AUTH-TOKEN";
+
+    private final WebOidcUserService userService;
 
     public final static String[] PERMIT_ALL_URL = new String[]{LOGIN_URL};
 
@@ -48,9 +30,23 @@ public class SecurityConfiguration {
                                 .anyRequest().authenticated()
 
                 );
-        http.oauth2Login(Customizer.withDefaults());
+
+//        http.oauth2Login(f -> {
+//            f.userInfoEndpoint(g ->{
+//                g.userService(userService);
+//            });
+//
+//        });
+
         return http.build();
     }
 
+    public static MyOidcUser getLoginUser() {
+        var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof MyOidcUser) {
+            return (MyOidcUser) principal;
+        }
+        throw new RuntimeException("認証情報の取得に失敗しました。");
+    }
 
 }

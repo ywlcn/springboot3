@@ -2,15 +2,26 @@ server:
   port: 8083
 spring:
   application:
-    name: SpringSecurityOAuth2-google
+    name: SpringSecurityOAuth2-Keycloak
 
   security:
     oauth2:
       client:
         registration:
-          google:
-            client-id: 75752582224-mpehrvvbkviqkfscikbto3asi6h34hvo.apps.googleusercontent.com
-            client-secret: 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
+          keycloak:
+            client-id: demo-app
+            client-secret: vE1T55t77pAA7oNu8fkaDo5AG5Y5kdmH
+            provider: keycloak
+            scope: openid
+            authorization-grant-type: authorization_code
+            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+        provider:
+          keycloak:
+            authorization-uri: http://localhost:18080/realms/demo/protocol/openid-connect/auth
+            token-uri: http://localhost:18080/realms/demo/protocol/openid-connect/token
+            user-info-uri: http://localhost:18080/realms/demo/protocol/openid-connect/userinfo
+            jwk-set-uri: http://localhost:18080/realms/demo/protocol/openid-connect/certs
+            user-name-attribute: preferred_username
 
 logging:
   level:

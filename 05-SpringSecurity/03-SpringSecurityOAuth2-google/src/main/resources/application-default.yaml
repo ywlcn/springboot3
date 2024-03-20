@@ -2,7 +2,7 @@ server:
   port: 8083
 spring:
   application:
-    name: SpringSecurityOAuth2-google
+    name: SpringSecurityOAuth2-Google
 
   security:
     oauth2:

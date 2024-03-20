@@ -4,26 +4,48 @@ SpringSecurity
 
 https://qiita.com/opengl-8080/items/7c34053c74448d39e8f5
 
+https://qiita.com/opengl-8080/items/6dc37f8b77abb5ae1642
 
 
 
 
 
 
-# 1. 概要   
 
-- SpringFrameworkの一員として提供されている。`org.springframework.boot:spring-boot-starter-security`という依存関係を追加することで適用される
-- 提供機能
-  - 認証
-    - アプリケーションを利用するユーザーの正当性を確認する機能。
-  - 認可
-    - アプリケーションが提供するリソースや処理に対してアクセスを制御する機能。
-  - 他のセキュリティ機能
-    - セッション管理機能
-    - CSRF   COR
-    - セキュリティヘッダ出力機能
+# 1. 概要  
 
-https://spring.pleiades.io/spring-security/reference/servlet/architecture.html
+## 1.1 物語の起源
+
+- 社内セキュリティガイドラインがあり、古くて。最新完了したプロジェクトはSpringSecurtyを利用して。どこまで利用できるか検証しながらガイドラインを作成
+
+  - SpringFrameworkの一員として提供されている。`org.springframework.boot:spring-boot-starter-security`という依存関係を追加することで適用される
+  - 提供機能
+    - 認証
+      - アプリケーションを利用するユーザーの正当性を確認する機能。
+    - 認可
+      - アプリケーションが提供するリソースや処理に対してアクセスを制御する機能。
+    - 他のセキュリティ機能
+      - セッション管理機能
+      - CSRF   COR
+      - セキュリティヘッダ出力機能
+
+  https://spring.pleiades.io/spring-security/reference/servlet/architecture.html
+
+- ipaより安全なウェブサイトの作り方ページがあり、https://www.ipa.go.jp/security/vuln/websecurity/index.htmlそれを参照しながら理解している
+
+  | **#** | **攻撃種類**                                             | **SpringFramework対策可否** |
+  | ----- | -------------------------------------------------------- | --------------------------- |
+  | 1     | SQLインジェクション                                      | ー                          |
+  | 2     | OSコマンド・インジェクション                             | ー                          |
+  | 3     | パス名パラメータの未チェック／ディレクトリ・トラバーサル | ー                          |
+  | 4     | セッション管理の不備                                     | 〇                          |
+  | 5     | クロスサイト・スクリプティング                           | 〇                          |
+  | 6     | CSRF（クロスサイト・リクエスト・フォージェリ）           | 〇                          |
+  | 7     | HTTPヘッダ・インジェクション                             | △                           |
+  | 8     | メールヘッダ・インジェクション                           | ー                          |
+  | 9     | クリックジャッキング                                     | 〇                          |
+  | 10    | バッファオーバーフロー                                   | ー                          |
+  | 11    | アクセス制御や認可制御の欠落                             | 〇                          |
 
 # 2. アーキテクチャ
 
@@ -100,23 +122,23 @@ https://spring.pleiades.io/spring-security/reference/servlet/architecture.html
 
   セッションから関連認証やcsrf情報をクリアして、ログイン画面にリダイレクトする。
 
-- org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter（★）
+- org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
   ログイン画面でログインボタンを押下する際の動作
 
-- org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter（★）
+- org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter
 
   `/login`（設定可能）にアクセスやパスワード認証エラーやログアウト成功時のみ当該フィルターが動作される
 
   ログイン画面のHtml画面を生成して、返す。
 
-- org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter（★）
+- org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter
 
   `/logout`（設定可能）にアクセス時のみ当該フィルターが動作される
 
   ログアウト画面のHtml画面を生成して、返す。
 
-- org.springframework.security.web.authentication.www.BasicAuthenticationFilter（★）
+- org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 
   ヘッダに認証情報がある場合に、取得して認証を行う。
 
@@ -151,8 +173,6 @@ https://spring.pleiades.io/spring-security/reference/servlet/architecture.html
 - org.springframework.security.web.access.intercept.AuthorizationFilter
 
   認可を行う。失敗すると`AccessDeniedException`
-
-
 
 ## 2.3パスワードの生成
 
@@ -212,8 +232,10 @@ Using generated security password: 14b31fe3-0aef-4441-a977-1bb44cc591fb
         serializer.setUseSecureCookie(true);
         return serializer;
     }
+    ```
   ```
     
+  ```
 
 - セッションID固定化攻撃
 
@@ -322,11 +344,13 @@ CSRF対策が行われていないWebアプリケーションを利用すると�
 
 - [X-Content-Type-Options](https://developer.mozilla.org/ja/docs/Web/HTTP/Headers/X-Content-Type-Options) クライアント側は指定したMIMEで解析
 
+  Json ハイジャックへの対策やコンテンツ形式を偽装する攻撃への対策
+
   ```http
   X-Content-Type-Options: nosniff
   ```
 
-- [X-XSS-Protection](https://developer.mozilla.org/ja/docs/Web/HTTP/Headers/X-XSS-Protection) 標準機能ではなくて、↓ の設定によって、不要
+- [X-XSS-Protection](https://developer.mozilla.org/ja/docs/Web/HTTP/Headers/X-XSS-Protection) 標準機能ではなくて、↓ の設定によって、不要が一部ブラウザは下記のものをサポートしていないので、そのままつけたほうよいかも
 
 - [Content-Security-Policy](https://developer.mozilla.org/ja/docs/Web/HTTP/Headers/Content-Security-Policy)
 
@@ -356,7 +380,7 @@ CSRF対策が行われていないWebアプリケーションを利用すると�
 
 - https://www.ipa.go.jp/security/vuln/websecurity/clickjacking.html
 
-### 3.2.2 SpringSecurtyの対策
+### 3.4.2 SpringSecurtyの対策
 
 `org.springframework.security.web.header.HeaderWriterFilter`でデフォルト対応している。「X-Frame-Options: DENY」というヘッダ
 
@@ -366,7 +390,58 @@ CSRF対策が行われていないWebアプリケーションを利用すると�
 | SAMEORIGIN | 同一オリジンのウェブページのみフレーム内の表示を許可     |
 | ALLOW-FROM | 指定したオリジンのウェブページのみフレーム内の表示を許可 |
 
+### 3.4.3 比較
+
+|                      | **攻撃目的**                                                 | **手段**                                                     |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| XSS                  | 非正規サイトユーザーのブラウザ内で**スクリプトを実行**する   | ー                                                           |
+| CSRF                 | 正規サイトに対してユーザ**意識せずに操作**してしまう（更新、削除） | 同じブラウザで正常サイトと非正規サイトともあり、正規サイトログイン状態で、非正規のサイトから何かしらの操作 |
+| クリックジャッキング | 同上                                                         | 画面上に透明なiframeを設けて意識せずクリックしてしまう       |
 
 
 
-# 4. Keycloak + SpringSecurity
+## 3.5 HTTPヘッダ・インジェクション  
+
+```html
+Aaa-Header: AAAAA<改行>
+Bbb-Header: BBBBB<改行>
+User-Input-Header: 【xxx<改行>Xxxx-Header: xxxxxxxxxx】<改行>
+<改行>
+HTTP Message Body
+↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+Aaa-Header: AAAAA<改行>
+Bbb-Header: BBBBB<改行>
+User-Input-Header: xxx<改行>
+Xxxx-Header: xxxxxxxxxx<改行>
+<改行>
+HTTP Message Body
+```
+
+
+
+## 3.5 そのほか
+
+### 3.5.1 HSTS
+
+- HSTS（HTTP Strict Transport Security）
+
+  簡単にいうとHttpのリクエストに対してもHttpsのレスポンスに返す。
+
+  https://spring.pleiades.io/spring-security/reference/servlet/exploits/headers.html#servlet-headers-hsts
+
+## 3.5.2 平行ログイン禁止
+
+https://spring.pleiades.io/spring-security/reference/servlet/authentication/session-management.html#ns-concurrent-sessions
+
+
+
+
+
+# 5. Google+ SpringSecurity
+
+
+
+
+
+# 6. Keycloak + SpringSecurity
+

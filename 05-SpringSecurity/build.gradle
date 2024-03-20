@@ -33,7 +33,6 @@ subprojects {
 
     dependencies {
         implementation "org.springframework.boot:spring-boot-starter-web"
-        implementation "org.springframework.boot:spring-boot-starter-security"
         implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
 
         // データベースの接続
@@ -51,7 +50,7 @@ project(":00-SpringSecurityUtils") {
 
     dependencies {
 
-
+        implementation "org.springframework.boot:spring-boot-starter-security"
     }
 }
 
@@ -100,6 +99,7 @@ project(":03-SpringSecurityOAuth2-Keycloak") {
         //OAuth
         implementation 'org.springframework.security:spring-security-oauth2-client'
         implementation 'org.springframework.security:spring-security-oauth2-jose'
+        implementation "org.springframework.boot:spring-boot-starter-data-jpa"
     }
 }
 
@@ -113,7 +113,6 @@ project(":04-SpringSecuritySAML2") {
 
     }
 }
-
 
 
 project(":99-SpringSecurityTest") {
