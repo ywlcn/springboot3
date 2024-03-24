@@ -32,13 +32,13 @@ subprojects {
     }
 
     dependencies {
-        implementation "org.springframework.boot:spring-boot-starter-web"
-        implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+        api "org.springframework.boot:spring-boot-starter-web"
+        api "org.springframework.boot:spring-boot-starter-thymeleaf"
 
         // データベースの接続
-        implementation "com.mysql:mysql-connector-j"
-        implementation "org.hibernate.orm:hibernate-core"
-        implementation "com.zaxxer:HikariCP"
+        api "com.mysql:mysql-connector-j"
+        api "org.hibernate.orm:hibernate-core"
+        api "com.zaxxer:HikariCP"
 
         compileOnly "org.projectlombok:lombok:${lombok}"
         annotationProcessor "org.projectlombok:lombok:${lombok}"
@@ -50,19 +50,16 @@ project(":00-SpringSecurityUtils") {
 
     dependencies {
 
-        implementation "org.springframework.boot:spring-boot-starter-security"
+        api "org.springframework.boot:spring-boot-starter-security"
     }
 }
 
 project(":01-SpringSecurityHello") {
 
     dependencies {
-        implementation project(":00-SpringSecurityUtils")
-        implementation "org.springframework.session:spring-session-core"
-        implementation "org.springframework.session:spring-session-jdbc"
-
-
-
+        api project(":00-SpringSecurityUtils")
+        api "org.springframework.session:spring-session-core"
+        api "org.springframework.session:spring-session-jdbc"
     }
 }
 
@@ -71,8 +68,8 @@ project(":02-SpringSecurityRest") {
 
     dependencies {
 
-        implementation project(":00-SpringSecurityUtils")
-        implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+        api project(":00-SpringSecurityUtils")
+        api "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
 
     }
 }
@@ -82,10 +79,10 @@ project(":03-SpringSecurityOAuth2-Google") {
 
     dependencies {
 
-        implementation project(":00-SpringSecurityUtils")
+        api project(":00-SpringSecurityUtils")
         //OAuth
-        implementation 'org.springframework.security:spring-security-oauth2-client'
-        implementation 'org.springframework.security:spring-security-oauth2-jose'
+        api 'org.springframework.security:spring-security-oauth2-client'
+        api 'org.springframework.security:spring-security-oauth2-jose'
     }
 }
 
@@ -94,12 +91,13 @@ project(":03-SpringSecurityOAuth2-Keycloak") {
 
     dependencies {
 
-        implementation project(":00-SpringSecurityUtils")
-        implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+        api project(":00-SpringSecurityUtils")
+        api "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+        api "org.springframework.session:spring-session-core"
         //OAuth
-        implementation 'org.springframework.security:spring-security-oauth2-client'
-        implementation 'org.springframework.security:spring-security-oauth2-jose'
-        implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+        api 'org.springframework.security:spring-security-oauth2-client'
+        api 'org.springframework.security:spring-security-oauth2-jose'
+        api "org.springframework.boot:spring-boot-starter-data-jpa"
     }
 }
 
@@ -108,8 +106,8 @@ project(":04-SpringSecuritySAML2") {
 
     dependencies {
 
-        implementation project(":00-SpringSecurityUtils")
-        implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+        api project(":00-SpringSecurityUtils")
+        api "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
 
     }
 }
@@ -118,12 +116,12 @@ project(":04-SpringSecuritySAML2") {
 project(":99-SpringSecurityTest") {
 
     dependencies {
-        implementation project(":00-SpringSecurityUtils")
+        api project(":00-SpringSecurityUtils")
 
 
-//        implementation "org.springframework.session:spring-session-jdbc"
-//        implementation "org.springframework.session:spring-session"
-//        implementation "org.springframework.session:spring-core"
+//        api "org.springframework.session:spring-session-jdbc"
+//        api "org.springframework.session:spring-session"
+//        api "org.springframework.session:spring-core"
     }
 }
 

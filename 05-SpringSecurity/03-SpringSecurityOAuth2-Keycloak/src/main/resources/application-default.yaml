@@ -3,24 +3,33 @@ server:
 spring:
   application:
     name: SpringSecurityOAuth2-Keycloak
-
+# トークンイントロスペクションのエンドポイント
+# [keycloakのホスト]/realms/[レルム名]/protocol/openid-connect/token/introspect
   security:
     oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9080/realms/SpringSecurityTestRealmID
+#        opaquetoken:
+#          introspection-uri: http://localhost:9080/realms/SpringSecurityTest/protocol/openid-connect/token/introspect
+#          client-id: springSecurityTest
+#          client-secret: ze2RGT8tBy7AVUQStJbnOCPHkrzfjBGN
       client:
         registration:
           keycloak:
-            client-id: demo-app
+            client-id: spring-security-test-client-id
             client-secret: vE1T55t77pAA7oNu8fkaDo5AG5Y5kdmH
             provider: keycloak
             scope: openid
             authorization-grant-type: authorization_code
-            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            #redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
         provider:
           keycloak:
-            authorization-uri: http://localhost:18080/realms/demo/protocol/openid-connect/auth
-            token-uri: http://localhost:18080/realms/demo/protocol/openid-connect/token
-            user-info-uri: http://localhost:18080/realms/demo/protocol/openid-connect/userinfo
-            jwk-set-uri: http://localhost:18080/realms/demo/protocol/openid-connect/certs
+            issuer-uri: http://localhost:9080/realms/SpringSecurityTestRealmID
+            #authorization-uri: http://localhost:9080/realms/SpringSecurityTest/protocol/openid-connect/auth
+            #token-uri: http://localhost:9080/realms/SpringSecurityTest/protocol/openid-connect/token
+            #user-info-uri: http://localhost:9080/realms/SpringSecurityTest/protocol/openid-connect/userinfo
+            #jwk-set-uri: http://localhost:9080/realms/SpringSecurityTest/protocol/openid-connect/certs
             user-name-attribute: preferred_username
 
 logging:

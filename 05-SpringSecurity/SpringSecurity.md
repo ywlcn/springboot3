@@ -8,7 +8,7 @@ https://qiita.com/opengl-8080/items/6dc37f8b77abb5ae1642
 
 
 
-
+TODO:　HTTPS　Cookie　Http
 
 
 
@@ -174,7 +174,11 @@ https://qiita.com/opengl-8080/items/6dc37f8b77abb5ae1642
 
   認可を行う。失敗すると`AccessDeniedException`
 
-## 2.3パスワードの生成
+## 2.3パスワード
+
+デフォルトの４種類のエンコードが提供されている
+
+https://spring.pleiades.io/spring-security/reference/features/authentication/password-storage.html#authentication-password-storage-dpe-format
 
 ```plain
 org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration : 
@@ -439,9 +443,12 @@ https://spring.pleiades.io/spring-security/reference/servlet/authentication/sess
 
 # 5. Google+ SpringSecurity
 
+承認済みのリダイレクト URI：http://localhost:8083/login/oauth2/code/google
 
+https://spring.pleiades.io/spring-security/reference/servlet/oauth2/login/core.html#oauth2login-common-oauth2-provider
 
 
 
 # 6. Keycloak + SpringSecurity
 
+https://www.a-frontier.jp/technology/security11/
