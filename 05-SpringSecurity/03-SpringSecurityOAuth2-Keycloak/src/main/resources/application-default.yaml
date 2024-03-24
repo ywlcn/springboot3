@@ -21,6 +21,7 @@ spring:
             client-secret: vE1T55t77pAA7oNu8fkaDo5AG5Y5kdmH
             provider: keycloak
             scope: openid
+            #scope: openid,email,profile,springaccess
             authorization-grant-type: authorization_code
             #redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
         provider:

@@ -452,3 +452,5 @@ https://spring.pleiades.io/spring-security/reference/servlet/oauth2/login/core.h
 # 6. Keycloak + SpringSecurity
 
 https://www.a-frontier.jp/technology/security11/
+
+https://qiita.com/kazuki43zoo/items/c70549931a4b0bc67757#%E5%8F%82%E8%80%83-oauth-20oidc-10-login%E6%A9%9F%E8%83%BD%E3%81%A7%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B%E3%83%A2%E3%83%87%E3%83%AB%E3%82%AF%E3%83%A9%E3%82%B9

@@ -7,9 +7,16 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
+import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Configuration
 @EnableWebSecurity
@@ -26,26 +33,17 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) ->
-                        //authorize.requestMatchers(PERMIT_ALL_URL).permitAll()
-                        //authorize.requestMatchers(("/index")).hasAuthority("SCOPE_profile")
-                        authorize.anyRequest().authenticated()
+                        {
+                            //authorize.requestMatchers(PERMIT_ALL_URL).permitAll();
+                            authorize.requestMatchers(("/index")).hasAuthority("SCOPE_springaccess");
+                            authorize.anyRequest().authenticated();
+                        }
                 );
         http.rememberMe(AbstractHttpConfigurer::disable);
 
         http.oauth2Login(Customizer.withDefaults());
+        http.oauth2Client(Customizer.withDefaults());
+
         return http.build();
     }
-
-
-    @Bean
-    public CookieSerializer cookieSerializer() {
-        DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-        serializer.setCookieName("JSESSIONID");
-        serializer.setCookiePath("/");
-        serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$");
-        // HTTPS プロトコル上の暗号化されたリクエストでのみサーバーに送信され、安全でない HTTP では決して送信されない
-        serializer.setUseSecureCookie(true);
-        return serializer;
-    }
-
 }
