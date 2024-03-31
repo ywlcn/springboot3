@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface UserService {
     Optional<User> findById(String accountId);
-    Optional<List<User>> findALl();
+    List<User> findALl();
 }

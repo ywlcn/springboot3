@@ -21,7 +21,7 @@ public interface UserMapper {
             SELECT userId, userName, age, teamId
             FROM users
             """)
-    Optional<List<User>> findAll();
+    List<User> findAll();
 }
 
 

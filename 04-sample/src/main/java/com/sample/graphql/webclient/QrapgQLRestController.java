@@ -56,7 +56,7 @@ public class QrapgQLRestController {
     public List<User> getUsers() {
         String document = """
                 query {
-                    users() {
+                    users {
                         userId
                         userName
                         age

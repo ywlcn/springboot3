@@ -21,7 +21,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<List<User>> findAll() {
+    public List<User> findAll() {
         return userMapper.findAll();
     }
 

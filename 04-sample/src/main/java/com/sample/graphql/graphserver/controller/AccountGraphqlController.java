@@ -40,8 +40,7 @@ public class AccountGraphqlController{
     @QueryMapping
     public List<User> users() {
         logger.info("=== Query Call, queryUsers. === ");
-        final Optional<List<User>> acc = userService.findALl();
-        return acc.get();
+        return userService.findALl();
     }
 
     @SchemaMapping(typeName = "User", field = "team")

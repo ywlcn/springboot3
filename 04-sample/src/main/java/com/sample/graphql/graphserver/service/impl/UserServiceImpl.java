@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<List<User>> findALl() {
+    public List<User> findALl() {
         return accountdao.findAll();
     }
 }
