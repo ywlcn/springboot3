@@ -26,16 +26,15 @@ INSERT INTO district(name, cityId) VALUES('district304', 3);
 
 
 
+INSERT INTO groups(groupId, groupName) VALUES('001', 'GroupName001');
+INSERT INTO groups(groupId, groupName) VALUES('002', 'GroupName002');
 
-INSERT INTO service_group(service_group_id, service_group_name) VALUES('001', 'Service101');
-INSERT INTO service_group(service_group_id, service_group_name) VALUES('002', 'Service102');
+INSERT INTO teams(teamId, groupId, teamName, teamAuthority) VALUES('001', '001'  , 'Team001' , 'teamAuthority001'  );
+INSERT INTO teams(teamId, groupId, teamName, teamAuthority) VALUES('002', '001'  , 'Team002' , 'teamAuthority002'  );
+INSERT INTO teams(teamId, groupId, teamName, teamAuthority) VALUES('003', '001'  , 'Team003' , 'teamAuthority003'  );
+INSERT INTO teams(teamId, groupId, teamName, teamAuthority) VALUES('101', '002'  , 'Team101' , 'teamAuthority101'  );
+INSERT INTO teams(teamId, groupId, teamName, teamAuthority) VALUES('102', '002'  , 'Team102' , 'teamAuthority102'  );
+INSERT INTO teams(teamId, groupId, teamName, teamAuthority) VALUES('103', '002'  , 'Team103' , 'teamAuthority103'  );
 
-INSERT INTO team(team_id, belonging_service_group_id, team_name, team_authority) VALUES('001', '001'  , 'Team001' , 'team_authority001'  );
-INSERT INTO team(team_id, belonging_service_group_id, team_name, team_authority) VALUES('002', '001'  , 'Team002' , 'team_authority002'  );
-INSERT INTO team(team_id, belonging_service_group_id, team_name, team_authority) VALUES('003', '001'  , 'Team003' , 'team_authority003'  );
-INSERT INTO team(team_id, belonging_service_group_id, team_name, team_authority) VALUES('101', '002'  , 'Team101' , 'team_authority101'  );
-INSERT INTO team(team_id, belonging_service_group_id, team_name, team_authority) VALUES('102', '002'  , 'Team102' , 'team_authority102'  );
-INSERT INTO team(team_id, belonging_service_group_id, team_name, team_authority) VALUES('103', '002'  , 'Team103' , 'team_authority103'  );
-
-INSERT INTO account(account_id, user_name, age, account_type , belonging_service_group_id , belonging_team_id) VALUES('001', 'Name001' , 101 , 'ADMIN' , '001'  , '001');
-INSERT INTO account(account_id, user_name, age, account_type , belonging_service_group_id , belonging_team_id) VALUES('002', 'Name002' , 102 , 'ADMIN' , '002'  , '101');
+INSERT INTO users(userId, userName, age, userType , teamId) VALUES('001', 'Name001' , 101 , 'ADMIN' , '001');
+INSERT INTO users(userId, userName, age, userType , teamId) VALUES('002', 'Name002' , 102 , 'ADMIN' , '101');

@@ -1,26 +1,26 @@
 # クエリ定義
 type Query {
-    accountById(accountId: ID): Account
+    userById(userId: ID): User
+    users: [User]
 }
 # タイプ定義
-type ServiceGroup {
-    serviceGroupId: ID!
-    serviceGroupName: String
-    teams: [Team]
+type Group {
+    groupId: ID!
+    groupName: String
 }
 type Team {
     teamId: ID!
     teamName: String
     teamAuthority: String
-    serviceGroup: ServiceGroup!
+    group: Group
 }
-type Account {
-    accountId: ID!
+type User {
+    userId: ID!
+    teamId: String
     userName: String
     age: Int
     accountType: String
-    serviceGroup: ServiceGroup!
-    team: Team!
+    team: Team
 }
 
 # Enum定義
