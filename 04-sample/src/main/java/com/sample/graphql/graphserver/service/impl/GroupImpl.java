@@ -5,9 +5,11 @@ import com.sample.graphql.graphserver.dto.Group;
 import com.sample.graphql.graphserver.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Transactional
 @Component
 public class GroupImpl implements GroupService {
 
