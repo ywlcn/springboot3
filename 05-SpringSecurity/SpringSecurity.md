@@ -2,14 +2,6 @@ SpringSecurity
 
 
 
-https://qiita.com/opengl-8080/items/7c34053c74448d39e8f5
-
-https://qiita.com/opengl-8080/items/6dc37f8b77abb5ae1642
-
-
-
-TODO:　HTTPS　Cookie　Http
-
 
 
 # 1. 概要  
@@ -398,7 +390,7 @@ CSRF対策が行われていないWebアプリケーションを利用すると�
 
 |                      | **攻撃目的**                                                 | **手段**                                                     |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| XSS                  | 非正規サイトユーザーのブラウザ内で**スクリプトを実行**する   | ー                                                           |
+| XSS                  | 非正規サイトでユーザーのブラウザ内で**スクリプトを実行**する | ー                                                           |
 | CSRF                 | 正規サイトに対してユーザ**意識せずに操作**してしまう（更新、削除） | 同じブラウザで正常サイトと非正規サイトともあり、正規サイトログイン状態で、非正規のサイトから何かしらの操作 |
 | クリックジャッキング | 同上                                                         | 画面上に透明なiframeを設けて意識せずクリックしてしまう       |
 
@@ -429,9 +421,22 @@ HTTP Message Body
 
 - HSTS（HTTP Strict Transport Security）
 
-  簡単にいうとHttpのリクエストに対してもHttpsのレスポンスに返す。
-
   https://spring.pleiades.io/spring-security/reference/servlet/exploits/headers.html#servlet-headers-hsts
+
+  - ２回以降はHttpsで通信するようにブラウザに連絡する。ブラウザはそのURLを持ち込まれて、指定した期間内で指定したサイトはHTTPSで通信する。
+    - chrome://net-internals/#hsts
+  - HSTS設定なしの場合 ・・・ `http`で通信 → `https`に301リダイレクト。毎回必ず`http`通信が発生する。
+  - HSTS設定ありの場合 ・・・ 初回だけ`http`通信をすれば、以降は有効期限内であれば、301リダイレクトなしに`https`での通信になる。
+
+
+
+- preloaded HSTS     https://hstspreload.org/
+
+  - ブラウザは"preloaded HSTS(HTTP Strict Transport Security)"リストを調べます。これはHTTPSでのみリクエストを送るように求めているウェブサイトの一覧です。
+
+    もしそのウェブサイトがリストにあれば、ブラウザはHTTPではなくHTTPSでリクエストを送ります。なければ最初のリクエストはHTTPで送られます。ウェブサイトは、HSTS一覧になくてもHSTSポリシーを利用可能であることに注意してください。最初のHTTPリクエストに対するレスポンスは、HTTPSリクエストのみでリクエストを送ることを要求するものです。しかし、この1回のHTTPリクエストによりユーザはダウングレード攻撃を受ける可能性があります。そのため、現在のWebブラウザにはHSTS一覧が搭載されています。
+
+
 
 ## 3.5.2 平行ログイン禁止
 
@@ -441,7 +446,7 @@ https://spring.pleiades.io/spring-security/reference/servlet/authentication/sess
 
 
 
-# 5. Google+ SpringSecurity
+# 5. Google + SpringSecurity
 
 承認済みのリダイレクト URI：http://localhost:8083/login/oauth2/code/google
 
@@ -454,3 +459,15 @@ https://spring.pleiades.io/spring-security/reference/servlet/oauth2/login/core.h
 https://www.a-frontier.jp/technology/security11/
 
 https://qiita.com/kazuki43zoo/items/c70549931a4b0bc67757#%E5%8F%82%E8%80%83-oauth-20oidc-10-login%E6%A9%9F%E8%83%BD%E3%81%A7%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B%E3%83%A2%E3%83%87%E3%83%AB%E3%82%AF%E3%83%A9%E3%82%B9
+
+
+
+
+
+
+
+参考資料：
+
+https://qiita.com/opengl-8080/items/7c34053c74448d39e8f5
+
+https://qiita.com/opengl-8080/items/6dc37f8b77abb5ae1642
