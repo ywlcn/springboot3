@@ -25,6 +25,7 @@ public class SecurityConfiguration {
                                 .anyRequest().authenticated()
 
                 );
+
         http.oauth2Login(Customizer.withDefaults());
         return http.build();
     }

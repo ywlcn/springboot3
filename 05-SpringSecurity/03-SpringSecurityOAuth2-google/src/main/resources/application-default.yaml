@@ -9,8 +9,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 75752582224-7ltvu93k1hs4b131uljmerokjqt74i0b.apps.googleusercontent.com
-            client-secret: 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
+            client-id: 75752582224-m8r2q3e3u1c8qodjpqha2j9rq51gqio2.apps.googleusercontent.com
+            client-secret: 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
 
 logging:
   level:

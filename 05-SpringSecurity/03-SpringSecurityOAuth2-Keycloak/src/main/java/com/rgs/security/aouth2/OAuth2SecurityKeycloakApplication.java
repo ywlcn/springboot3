@@ -6,10 +6,10 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan({"com.rgs.utils", "com.rgs.security"})
-public class OAuth2SecurityApplication {
+public class OAuth2SecurityKeycloakApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OAuth2SecurityApplication.class, args);
+        SpringApplication.run(OAuth2SecurityKeycloakApplication.class, args);
     }
 
 }

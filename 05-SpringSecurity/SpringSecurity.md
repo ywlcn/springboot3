@@ -1,12 +1,4 @@
-SpringSecurity
-
-
-
-
-
 # 1. 概要  
-
-## 1.1 物語の起源
 
 - 社内セキュリティガイドラインがあり、古くて。最新完了したプロジェクトはSpringSecurtyを利用して。どこまで利用できるか検証しながらガイドラインを作成
 
@@ -23,7 +15,7 @@ SpringSecurity
 
   https://spring.pleiades.io/spring-security/reference/servlet/architecture.html
 
-- ipaより安全なウェブサイトの作り方ページがあり、https://www.ipa.go.jp/security/vuln/websecurity/index.htmlそれを参照しながら理解している
+  - ipaより安全なウェブサイトの作り方ページがあり、https://www.ipa.go.jp/security/vuln/websecurity/index.htmlそれを参照しながら理解している
 
   | **#** | **攻撃種類**                                             | **SpringFramework対策可否** |
   | ----- | -------------------------------------------------------- | --------------------------- |
