@@ -1,4 +1,4 @@
-package com.sample.filter;
+package com.sample.common.filter;
 
 import jakarta.servlet.*;
 import org.slf4j.Logger;
@@ -12,7 +12,6 @@ public class ErrorHandlerFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-
         try{
             chain.doFilter(req, res);
         }catch(Exception ex){
@@ -20,13 +19,11 @@ public class ErrorHandlerFilter implements Filter {
         }finally {
 
         }
-
     }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
-
 
     @Override
     public void destroy() {

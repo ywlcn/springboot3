@@ -17,7 +17,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+//@Controller
 public class NormalGraphqlController {
 
     private final Logger logger = LoggerFactory.getLogger(NormalGraphqlController.class);

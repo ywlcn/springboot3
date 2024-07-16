@@ -6,6 +6,7 @@ import com.sample.graphql.server.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -18,5 +19,10 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Optional<Team> findById(String id) {
         return teamDao.findById(id);
+    }
+
+    @Override
+    public List<Team> findAll() {
+        return teamDao.findAll();
     }
 }

@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <include resource="org/springframework/boot/logging/logback/base.xml" />
+<!--    <include resource="org/springframework/boot/logging/logback/base.xml" />-->
     <springProperty scope="context" name="appName" source="spring.application.name"/>
+
+    <property name="COMMON_LOG_PATTERN"
+              value="%date{ISO8601}\t[%X{requestId}]\t[%thread]\t[%-5p]\t%c\t%m%n" />
+
+    <appender name="CONSOLE"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${COMMON_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
 
 <!--    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">-->
 <!--&lt;!&ndash;        <http>&ndash;&gt;-->
@@ -21,8 +32,10 @@
 
 
 
-    <root level="INFO">
-        <appender-ref ref="FILE"/>
-        <appender-ref ref="console"/>
+
+
+
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>

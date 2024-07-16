@@ -10,17 +10,17 @@ import com.sample.graphql.server.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.graphql.data.method.annotation.*;
 import org.springframework.stereotype.Controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 
-//@Controller
+@Controller
 public class CallableGraphqlController {
 
     private final Logger logger = LoggerFactory.getLogger(CallableGraphqlController.class);
@@ -43,7 +43,7 @@ public class CallableGraphqlController {
                 return acc.get();
             }
         };
-        return new MyCallable(func , null);
+        return new MyCallable(func, null);
     }
 
     @QueryMapping
@@ -56,40 +56,51 @@ public class CallableGraphqlController {
                 return userService.findALl();
             }
         };
-        return new MyCallable(func , null);
+        return new MyCallable(func, null);
     }
 
-    @SchemaMapping(typeName = "User", field = "team")
-    public Callable<Team> team(final User user) {
-        logger.info("=== SchemaMapping , team. [" + user.getTeamId() + "]=== ");
+    @BatchMapping(typeName = "User", field = "team")
+    public Callable<Map<User, Team>> team(List<User> users) {
+        logger.info("=== BatchMapping , team. [" + users.toString() + "]=== ");
         Function func = new Function() {
             @Override
             public Object apply(Object o) {
-                logger.info("--- SchemaMapping Callable, team. === ");
-                final Optional<Team> t = teamService.findById(user.getTeamId());
-                return t.get();
+                logger.info("--- BatchMapping Callable, team. === ");
+                List<Team> teams = teamService.findAll();
+                Map<User, Team> map = new HashMap<>();
+                users.forEach(user -> {
+                    map.put(user, teams.stream().filter(t -> t.getTeamId().equals(user.getTeamId())).findFirst().get());
+                });
+                return map;
             }
         };
-        return new MyCallable(func , null);
-
-
+        return new MyCallable(func, null);
     }
 
-    @SchemaMapping(typeName = "Team", field = "group")
-    public Callable<Group> group(final Team team) {
-        logger.info("=== SchemaMapping , group. [" + team.getGroupId() + "]=== ");
+    @BatchMapping(typeName = "Team", field = "group")
+    public Callable<Map<Team, Group>> group(List<Team> teams) {
+        logger.info("=== BatchMapping , groups. [" + teams.toString() + "]=== ");
         Function func = new Function() {
             @Override
             public Object apply(Object o) {
                 logger.info("--- SchemaMapping Callable, group. === ");
-                final Optional<Group> sg = groupService.findById(team.getGroupId());
-                return sg.get();
+                List<Group> groups = groupService.findAll();
+                Map<Team, Group> map = new HashMap<>();
+                teams.forEach(team -> {
+//                    try {
+//                        Thread.sleep(3000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+                    map.put(team, groups.stream().filter(t -> t.getGroupId().equals(team.getGroupId())).findFirst().get());
+                });
+                return map;
             }
         };
-        return new MyCallable(func , null);
-
-
+        return new MyCallable(func, null);
     }
+
+    
 
 
 }

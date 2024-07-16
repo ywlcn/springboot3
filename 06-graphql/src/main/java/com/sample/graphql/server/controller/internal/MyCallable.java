@@ -23,7 +23,6 @@ public class MyCallable implements Callable {
         this.attri = RequestContextHolder.getRequestAttributes();
     }
 
-
     @Override
     public Object call() throws Exception {
 
@@ -40,9 +39,6 @@ public class MyCallable implements Callable {
             RequestContextHolder.setRequestAttributes(null);
             MDC.remove(REQUEST_ID);
         }
-
-
     }
-
 
 }

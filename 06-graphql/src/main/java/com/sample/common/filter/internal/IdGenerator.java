@@ -1,4 +1,4 @@
-package com.sample.filter.internal;
+package com.sample.common.filter.internal;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,8 +12,8 @@ public class IdGenerator {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         int i = atomicInteger.incrementAndGet();
         String str = "0000000" + i;
-        str = str.substring(str.length() - 4, str.length() - 1);
-        return sdf.format(new Date()) + str;
+        str = str.substring(str.length() - 3);
+        return sdf.format(new Date()) + "-" + str;
     }
 
 }

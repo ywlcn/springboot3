@@ -32,8 +32,10 @@ spring:
       enabled: true
   application:
     name: Sample
+  mvc:
+    async:
+      request-timeout: 5000
 
-  # データソース定義は省略
   graphql:
     graphiql:
       enabled: true
@@ -86,4 +88,6 @@ logging:
     # traceID and spanId are predefined MDC keys - we want the logs to include them
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
 
-
+  level:
+    root: WARN
+    "org.springframework.graphql.data.method.annotation.support.GraphqlLogInstrument": ERROR
