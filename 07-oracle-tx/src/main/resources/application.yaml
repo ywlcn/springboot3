@@ -12,10 +12,37 @@ spring:
 #    driver-class-name: org.hsqldb.jdbc.JDBCDriver
 #    url: jdbc:hsqldb:mem:testdb;DB_CLOSE_DELAY=-1
     driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@//192.168.10.128:1521/MYATP
+    url: jdbc:oracle:thin:@//192.168.10.128:1521/FREEPDB1
+    #url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=192.168.10.128)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=myatp)))(SECURITY=(ENCRYPTION=REJECTED)(DATA_INTEGRITY=REJECTED))
     username: owx
     password: Welcome_1234
     initialize: true
+    type: oracle.ucp.jdbc.PoolDataSource
+    oracleucp:
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+      connection-pool-name: ConnectionPool
+      connection-wait-duration: 5
+      initial-pool-size: 1
+      min-pool-size: 1
+      max-pool-size: 5
+#    hikari:
+
+
+
+#      data-source-properties:
+#        javax:
+#          net:
+#            ssl:
+#              trustStore: D:\Tools-Java\zulu21.42.19-ca-jdk21.0.7-win_x64\lib\security\cacerts
+#              trustStorePassword: changeit
+#        oracle:
+#          net:
+#            ssl_context_protocol: TLSv1.2
+#            encryption_client: REJECTED
+#            crypto_checksum_client: REJECTED
+#            allowed_logon_version_client: 12
+#          jdbc:
+#            defaultConnectionValidation: LOCAL
   jpa:
     hibernate:
       ddl-auto: create

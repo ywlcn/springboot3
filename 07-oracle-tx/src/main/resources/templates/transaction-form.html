@@ -33,32 +33,39 @@
 
     <h2>当前数据状态</h2>
     <div class="status-box">
-        <strong th:text="${currentStatus}">SCHEMA_A = ACTIVE, SCHEMA_B = ACTIVE</strong>
-    </div>
 
+        <div class="form-group">
+            <label >Table</label>
+            <input type="number" id="ida" name="id" th:value="${tableA.id}" readonly="readonly">
+            <input id="namea" name="name" th:value="${tableA.name}" readonly="readonly">
+            <input id="statusa" name="id" th:value="${tableA.status}" readonly="readonly">
+        </div>
+        <div class="form-group">
+            <label >Table</label>
+            <input type="number" id="idb" name="id" th:value="${tableB.id}" readonly="readonly">
+            <input id="nameb" name="name" th:value="${tableB.name}" readonly="readonly">
+            <input id="statusb" name="id" th:value="${tableB.status}" readonly="readonly">
+        </div>
+    </div>
 
     <h2>执行新的事务操作</h2>
     <form th:action="@{/perform}" method="post">
-        <div class="form-group">
-            <label for="id">记录 ID:</label>
-            <input type="number" id="id" name="id" th:value="${id}" readonly="readonly">
-        </div>
-        <div class="form-group">
-            <label for="status">新状态值:</label>
-            <input type="text" id="status" name="status" th:value="${status}" required>
-        </div>
 
         <div style="margin-top: 20px;">
             <button type="submit" name="action" value="COMMIT" class="btn-commit">
                 执行事务并提交 (COMMIT)
             </button>
-
-            <button type="submit" name="action" value="ROLLBACK" class="btn-rollback">
+            <button type="submit" name="action" value="ROLLBACK1" class="btn-rollback">
+                执行事务并触发回滚 (ROLLBACK)
+            </button>
+            <button type="submit" name="action" value="ROLLBACK2" class="btn-rollback">
                 执行事务并触发回滚 (ROLLBACK)
             </button>
         </div>
-        <p style="margin-top: 15px; color: #666;">**注意:** 在 Rollback 模式下，系统会在更新操作后故意抛出异常。如果两个表的 Status 值保持不变，则证明一致性有效。</p>
     </form>
+
+
+
 </div>
 
 </body>

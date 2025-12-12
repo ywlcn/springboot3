@@ -44,6 +44,8 @@ dependencies {
 
 	implementation "com.oracle.database.jdbc:ojdbc11"
 
+	implementation "com.oracle.database.spring:oracle-spring-boot-starter-ucp:25.1.0"
+
 	// logback
 	implementation "ch.qos.logback:logback-access"
 	implementation "ch.qos.logback:logback-classic"

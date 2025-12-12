@@ -3,19 +3,19 @@
 <mapper namespace="com.sample.demo.dao.mapper.TransactionMapper">
 
     <update id="updateTableAStatus">
-        UPDATE table_a SET status = #{status} WHERE id = #{id}
+        UPDATE schema_a_user.table_a SET status = #{status} WHERE id = #{id}
     </update>
 
     <update id="updateTableBStatus">
         UPDATE schema_b_user.table_b SET status = #{status} WHERE id = #{id}
     </update>
 
-    <select id="getTableAStatus" resultType="string">
-        SELECT status FROM table_a WHERE id = #{id}
+    <select id="getTableAStatus" resultType="com.sample.demo.dao.entity.DataEntity">
+        SELECT name , id , status FROM schema_a_user.table_a
     </select>
 
-    <select id="getTableBStatus" resultType="string">
-        SELECT status FROM schema_b_user.table_b WHERE id = #{id}
+    <select id="getTableBStatus" resultType="com.sample.demo.dao.entity.DataEntity">
+        SELECT name , id , status FROM schema_b_user.table_b
     </select>
 
 </mapper>

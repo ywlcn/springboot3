@@ -3,10 +3,12 @@
 https://container-registry.oracle.com/ords/f?p=113:4:116540161899343:::4:P4_REPOSITORY,AI_REPOSITORY,AI_REPOSITORY_NAME,P4_REPOSITORY_NAME,P4_EULA_ID,P4_BUSINESS_AREA_ID:2223,2223,Oracle%20Autonomous%20Database%20Free,Oracle%20Autonomous%20Database%20Free,1,0&cs=3MGLqi_hS_lVT-QEGQJLRVdV_G3T9i3l80Yq7AlSr8pUiXLdLDspYjZ3e3faNEKn-xN7VaVq3coqsXSi2Y97Vug
 
 
+sudo keytool -import -alias adb_container_certificate -file adb_container.cert -keystore  /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib/security/cacerts
+
 
 docker pull container-registry.oracle.com/database/adb-free:latest-23ai
 
-
+https://container-registry.oracle.com/
 
 # ログイン
 
@@ -14,13 +16,13 @@ https://localhost:8443/ords/sql-developer
 
 https://192.168.10.128:8443/ords/sql-developer
 
-
-
+ADMIN/Welcome_1234
 owx/Welcome_1234                                 122.26.124.2
 
 https://qiita.com/nisshii0/items/e300edbbb7845a40cc11
 
-
+Listener Parameter File   /u01/app/oracle/product/23.0.0.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/8d8efb51f8dd/listener/alert/log.xml
 
 ```bash
 podman run -d \
@@ -176,8 +178,112 @@ SQL> ORA-32004: obsolete or deprecated parameter(s) specified for RDBMS instance
 
 
 
+# テストコマンド
 
-
-```text
-sqlplus admin/Welcome_1234@free_low
 ```
+ lsnrctl status
+ 
+```
+
+https://docs.oracle.com/en/database/oracle/oracle-database/26/jajdb/oracle/jdbc/OracleConnection.html#CONNECTION_PROPERTY_SSL_CONTEXT_PROTOCOL
+
+
+
+# DB
+
+
+
+
+
+```sql
+
+
+CREATE USER owx IDENTIFIED BY Welcome_1234;
+
+GRANT CONNECT, RESOURCE, CREATE SESSION TO owx;
+
+
+CREATE USER schema_a_user IDENTIFIED BY Welcome_1234;
+GRANT CONNECT, RESOURCE TO schema_a_user;
+ALTER USER schema_a_user QUOTA UNLIMITED ON users;
+
+CREATE USER schema_b_user IDENTIFIED BY Welcome_1234;
+GRANT CONNECT, RESOURCE TO schema_b_user;
+ALTER USER schema_b_user QUOTA UNLIMITED ON users;
+
+
+///// schema_a_user
+CREATE TABLE schema_a_user.table_a (
+    id NUMBER PRIMARY KEY,
+    name VARCHAR2(100),
+    status VARCHAR2(50)
+);
+INSERT INTO schema_a_user.table_a (id, name, status) VALUES (1, 'Initial Data A', 'ACTIVE');
+COMMIT;
+
+
+///// schema_b_user
+CREATE TABLE schema_b_user.table_b (
+    id NUMBER PRIMARY KEY,
+    name VARCHAR2(100),
+    status VARCHAR2(50)
+);
+INSERT INTO schema_b_user.table_b (id, name, status) VALUES (1, 'Initial Data B', 'ACTIVE');
+COMMIT;
+
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON schema_b_user.table_b TO owx;
+GRANT SELECT, INSERT, UPDATE, DELETE ON schema_a_user.table_a TO owx;
+
+
+```
+
+
+
+
+
+```
+<msg time='2025-12-12T09:21:47.972+00:00' org_id='oracle' comp_id='tnslsnr'
+ type='UNKNOWN' level='16' host_id='8d8efb51f8dd'
+ host_addr='192.168.10.128' pid='13' seclabel='3'>
+ <txt>12-DEC-2025 09:21:47:972 * (ADDRESS=(PROTOCOL=tcps)(HOST=192.168.10.105)(PORT=3795)(FIREWALL=OFF)) * &lt;unknown connect data&gt; * 29019
+ORA-29019: The protocol version is incorrect.
+ TNS-00542: SSL Handshake failed
+  TNS-12560: Database communication protocol error.
+   TNS-00542: SSL Handshake failed
+
+ </txt>
+</msg>
+```
+
+
+
+
+https://medium.com/oracledevs/retrieval-augmented-generation-rag-with-spring-ai-oracle-database-23ai-and-openai-61281b96d18a
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###################################
+
+podman run -d -p 1521:1521 -e ORACLE_PWD=Welcome_1234 -v oracle-volume:/opt/oracle/oradata container-registry.oracle.com/database/free:latest
