@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sample.demo.dao.mapper.TransactionMapper">
+
+    <update id="updateTableAStatus">
+        UPDATE table_a SET status = #{status} WHERE id = #{id}
+    </update>
+
+    <update id="updateTableBStatus">
+        UPDATE schema_b_user.table_b SET status = #{status} WHERE id = #{id}
+    </update>
+
+    <select id="getTableAStatus" resultType="string">
+        SELECT status FROM table_a WHERE id = #{id}
+    </select>
+
+    <select id="getTableBStatus" resultType="string">
+        SELECT status FROM schema_b_user.table_b WHERE id = #{id}
+    </select>
+
+</mapper>
