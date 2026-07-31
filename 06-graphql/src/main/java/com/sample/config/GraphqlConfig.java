@@ -3,6 +3,7 @@ package com.sample.config;
 import com.sample.common.filter.GraphqlFilter;
 import com.sample.common.filter.LogFilter;
 import com.sample.common.filter.RequestIdFilter;
+import com.sample.common.handler.LogDataFetcherExceptionResolverAdapter;
 import com.sample.common.interceptor.WebGraphQlLogInterceptor;
 import jakarta.servlet.DispatcherType;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -53,6 +54,11 @@ public class GraphqlConfig {
         annotatedControllerConfigurer.setExecutor(ExecutorService);
         return ExecutorService;
     }
+
+//    @Bean
+//    LogDataFetcherExceptionResolverAdapter logDataFetcherExceptionResolverAdapter(){
+//        return new LogDataFetcherExceptionResolverAdapter();
+//    }
 
     @Bean
     WebGraphQlLogInterceptor logGraphqlInterceptor002() {

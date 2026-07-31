@@ -28,16 +28,12 @@ public class RestNormalController {
 
     @RequestMapping("/getNormal")
     public List<User> getNormal() {
-        int i = 0;
-        i = 12 / i;
         return userService.findALl();
     }
 
     @RequestMapping("/getCallable")
     public Callable<List<User>> getCallable() {
         return () -> {
-            int i = 0;
-            i = 12 / i;
             return userService.findALl();
         };
     }

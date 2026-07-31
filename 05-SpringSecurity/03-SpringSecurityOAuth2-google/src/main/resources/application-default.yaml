@@ -12,6 +12,9 @@ spring:
             client-id: 75752582224-m8r2q3e3u1c8qodjpqha2j9rq51gqio2.apps.googleusercontent.com
             client-secret: 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
 
+
+
+
 logging:
   level:
     org.springframework.security.web.DefaultSecurityFilterChain: INFO

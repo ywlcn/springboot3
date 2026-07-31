@@ -20,9 +20,18 @@
 
 
 
+<!--    <logger name="com.zaxxer.hikari.pool.HikariPool" additivity="false" level="ERROR">-->
+<!--        <appender-ref ref="CONSOLE" />-->
+<!--    </logger>-->
 
-    <root level="INFO">
+        <logger name="io.opentelemetry.exporter.internal.okhttp" additivity="false" level="ERROR">
+<!--            <appender-ref ref="CONSOLE" />-->
+        </logger>
+
+
+
+    <root level="WARN">
         <appender-ref ref="FILE"/>
-        <appender-ref ref="console"/>
+<!--        <appender-ref ref="console"/>-->
     </root>
 </configuration>

@@ -87,6 +87,20 @@ project(":03-SpringSecurityOAuth2-Google") {
 }
 
 
+project(":03-SpringSecurityOAuth2-AzureAD") {
+
+    dependencies {
+
+        api project(":00-SpringSecurityUtils")
+        //OAuth
+        api 'org.springframework.boot:spring-boot-starter-oauth2-client'
+        // api 'org.springframework.security:spring-security-oauth2-jose'
+    }
+}
+
+
+
+
 project(":03-SpringSecurityOAuth2-Keycloak") {
 
     dependencies {

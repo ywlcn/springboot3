@@ -11,25 +11,32 @@ server:
 #server.error.whitelabel.enabled
 spring:
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/legoinfo
+    username: root
+    password: 123456
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
 #    driver-class-name: org.hsqldb.jdbc.JDBCDriver
 #    url: jdbc:hsqldb:mem:testdb;DB_CLOSE_DELAY=-1
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=1;DB_CLOSE_ON_EXIT=FALSE;MODE=DB2
-    username: sa
-    password:
-    initialize: true
-  jpa:
-    hibernate:
-      ddl-auto: create
-  sql:
-    init:
-      platform: h2
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=1;DB_CLOSE_ON_EXIT=FALSE;MODE=DB2
+#    username: sa
+#    password:
+#    initialize: true
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#  sql:
+#    init:
+#      platform: h2
 #      schema-locations:
 #      data-locations:
-  h2:
-    console:
-      # enable access from http://localhost:8080/h2-console
-      enabled: true
+#  h2:
+#    console:
+#      # enable access from http://localhost:8080/h2-console
+#      enabled: true
   application:
     name: Sample
 
@@ -77,13 +84,13 @@ management:
       # Micrometer Metrics configures this attribute with "unknown value".
       # It should probably be autoconfigured correctly by Spring Boot.
       "service.name": ${spring.application.name}
-  otlp:
-    tracing:
-      endpoint: ${OTLP_END_POINT:http://192.168.56.98:4318/v1/traces}
+#  otlp:
+#    tracing:
+#      endpoint: ${OTLP_END_POINT:http://192.168.56.98:4318/v1/traces}
 
 logging:
   pattern:
     # traceID and spanId are predefined MDC keys - we want the logs to include them
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
-
-
+#  level:
+#    com.zaxxer.hikari.pool.HikariPool: DEBUG

@@ -11,21 +11,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-//@Component
 public class ControllerExceptionHandler  {
 
-//    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-//    @org.springframework.web.bind.annotation.ExceptionHandler({ Exception.class })
-//    @ResponseBody
-//    public Map<String, Object> handleError() {
-//        Map<String, Object> errorMap = new HashMap<String, Object>();
-//        errorMap.put("message", "許可されていないメソッド");
-//        errorMap.put("status", HttpStatus.METHOD_NOT_ALLOWED);
-//        return errorMap;
-//    }
-
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @org.springframework.web.bind.annotation.ExceptionHandler({ Exception.class })
-    public String handleError() {
-        return "error";
+    @ResponseBody
+    public Map<String, Object> handleError() {
+        Map<String, Object> errorMap = new HashMap<String, Object>();
+        errorMap.put("message", "許可されていないメソッド");
+        errorMap.put("status", HttpStatus.METHOD_NOT_ALLOWED);
+        return errorMap;
     }
+
+//    @org.springframework.web.bind.annotation.ExceptionHandler({ Exception.class })
+//    public String handleError() {
+//        return "error";
+//    }
 }

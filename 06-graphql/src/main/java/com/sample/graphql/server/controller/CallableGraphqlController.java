@@ -48,10 +48,16 @@ public class CallableGraphqlController {
 
     @QueryMapping
     public Callable<List<User>> users() {
+
+//        int i = 0;
+//        i = 12/i;
         logger.info("=== QueryMapping , users.=== ");
         Function func = new Function() {
             @Override
             public Object apply(Object o) {
+//                int i = 0;
+//                i = 12/i;
+
                 logger.info("--- QueryMapping Callable, users. === ");
                 return userService.findALl();
             }

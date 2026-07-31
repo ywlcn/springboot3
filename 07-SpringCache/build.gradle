@@ -10,29 +10,21 @@ group = "com.sample"
 version = "0.0.1-SNAPSHOT"
 
 java {
-	sourceCompatibility = "17"
+	sourceCompatibility = "21"
 }
 
 repositories {
 	mavenCentral()
 }
 
-configurations {
-	demoTest.transitive = false
-}
-
-task testPrint{
-	configurations.forEach {
-		print(it)
-	}
-}
-
 dependencies {
 
 	implementation "org.springframework.boot:spring-boot-starter-web"
-	implementation "org.springframework.boot:spring-boot-starter-graphql"
-	implementation "org.springframework.boot:spring-boot-starter-mustache"
+	implementation "org.springframework.boot:spring-boot-starter-cache"
 	implementation "org.springframework.boot:spring-boot-starter-webflux"
+
+	// opentelemetry prometheus
+	implementation "io.micrometer:micrometer-registry-prometheus"
 
 //	implementation "org.springframework.boot:spring-boot-starter-data"
 	implementation "org.springframework.boot:spring-boot-starter-aop"
@@ -48,12 +40,21 @@ dependencies {
 	//runtimeOnly "org.hsqldb:hsqldb"
 	runtimeOnly "com.h2database:h2"
 
+
+
 	// logback
-	implementation "ch.qos.logback:logback-access"
+	implementation "ch.qos.logback:logback-core"
 	implementation "ch.qos.logback:logback-classic"
 
 	// mapstruct
 	implementation "org.mapstruct:mapstruct:1.5.5.Final"
+
+
+	// Javassist (JAVA programming ASSISTant) makes Java bytecode manipulation simple. It is a class library for editing bytecodes in Java.
+	//implementation 'org.javassist:javassist:3.29.2-GA'
+
+
+	//
 
 
 }
