@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.dao.dto.AddressBookEntity;
 import com.example.demo.dao.dto.CityEntity;
 
 public interface AddressBookDataService {
